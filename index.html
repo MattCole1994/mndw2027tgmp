@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#f4e3c3" />
+  <title>Lads only</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍺</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,400..700;1,400..600&family=Shrikhand&family=Yellowtail&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body class="is-locked">
+
+  <!-- ================= SHARED DRAWINGS ================= -->
+  <svg class="sprite" aria-hidden="true" focusable="false">
+    <defs>
+      <!-- Robin on a twig (City) -->
+      <symbol id="robin" viewBox="0 0 100 90">
+        <path d="M8,74 Q40,66 92,70" fill="none" stroke="#5b3424" stroke-width="4" stroke-linecap="round"/>
+        <path d="M30,52 L10,40 L14,56 Z" fill="#7a5a3e"/>
+        <ellipse cx="46" cy="52" rx="21" ry="16" fill="#7a5a3e"/>
+        <circle cx="62" cy="36" r="11" fill="#7a5a3e"/>
+        <path d="M70,32 Q76,42 68,56 Q60,64 50,62 Q60,50 58,40 Q62,30 70,32 Z" fill="#d9472b"/>
+        <ellipse cx="44" cy="60" rx="12" ry="6" fill="#f3e3c4"/>
+        <circle cx="65" cy="33" r="1.8" fill="#2a170e"/>
+        <path d="M72,34 L80,36 L72,38 Z" fill="#2a170e"/>
+        <path d="M44,66 L42,72 M52,66 L53,71" stroke="#5b3424" stroke-width="2" stroke-linecap="round"/>
+      </symbol>
+
+      <!-- Postage stamp: a robin at sunset -->
+      <symbol id="stamp" viewBox="0 0 80 96">
+        <rect width="80" height="96" fill="#fbf1dc"/>
+        <rect x="7" y="7" width="66" height="82" fill="#1f6b70"/>
+        <circle cx="40" cy="58" r="22" fill="#f2a03d"/>
+        <rect x="7" y="62" width="66" height="27" fill="#16545a"/>
+        <use href="#robin" x="14" y="26" width="52" height="47"/>
+        <text x="40" y="84" text-anchor="middle" font-family="Jost, Futura, sans-serif" font-size="8" font-weight="600" fill="#fbf1dc">ESPAÑA 27</text>
+      </symbol>
+
+      <!-- Postmark -->
+      <symbol id="postmark" viewBox="0 0 170 90">
+        <g fill="none" stroke="currentColor" stroke-width="2.2">
+          <circle cx="45" cy="45" r="38"/>
+          <circle cx="45" cy="45" r="27"/>
+          <path d="M92,24 q10,-7 20,0 t20,0 t20,0 M92,38 q10,-7 20,0 t20,0 t20,0 M92,52 q10,-7 20,0 t20,0 t20,0 M92,66 q10,-7 20,0 t20,0 t20,0"/>
+        </g>
+        <path id="pm-arc" d="M13,45 A32,32 0 0 1 77,45" fill="none"/>
+        <text font-family="Jost, Futura, sans-serif" font-size="9.5" font-weight="600" fill="currentColor" letter-spacing="1"><textPath href="#pm-arc" startOffset="50%" text-anchor="middle">XÀTIVA</textPath></text>
+        <text x="45" y="49" text-anchor="middle" font-family="Jost, Futura, sans-serif" font-size="11" font-weight="700" fill="currentColor">SIGNED</text>
+        <text x="45" y="64" text-anchor="middle" font-family="Jost, Futura, sans-serif" font-size="9" font-weight="600" fill="currentColor">2027</text>
+      </symbol>
+
+      <!-- Pint, poured with --pour (0 to 1) -->
+      <symbol id="pint" viewBox="0 0 20 28">
+        <clipPath id="pint-clip"><path d="M3,2 H17 L15.6,12 Q17.2,14 16.4,16 L15,26 H5 L3.6,16 Q2.8,14 4.4,12 Z"/></clipPath>
+        <g clip-path="url(#pint-clip)">
+          <rect class="pint-beer" x="0" y="6" width="20" height="22" fill="#e8962c"/>
+          <rect class="pint-head" x="0" y="3.5" width="20" height="3.5" fill="#fbf1dc"/>
+        </g>
+        <path d="M3,2 H17 L15.6,12 Q17.2,14 16.4,16 L15,26 H5 L3.6,16 Q2.8,14 4.4,12 Z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- ================= GATE ================= -->
+  <div id="gate" class="gate" role="dialog" aria-modal="true" aria-labelledby="gate-title">
+    <form id="gate-form" class="gate-card" autocomplete="off" novalidate>
+      <svg class="gate-robin" viewBox="0 0 100 90" aria-hidden="true"><use href="#robin"/></svg>
+      <h1 id="gate-title" class="gate-title">Lads only</h1>
+      <p class="gate-names">Mitch, Brad &amp; Liam</p>
+      <!-- EDIT: your hint (default passcode is "ashtongate") -->
+      <p class="gate-hint">Hint: where we turn up full of hope and leave disappointed. One word.</p>
+      <label for="passcode" class="sr-only">Passcode</label>
+      <input id="passcode" name="passcode" type="password" class="gate-input"
+             placeholder="Passcode" autocapitalize="none" spellcheck="false" required />
+      <button type="submit" class="btn btn-orange gate-btn">Let me in</button>
+      <p id="gate-error" class="gate-error" role="alert" aria-live="assertive"></p>
+    </form>
+  </div>
+
+  <!-- ================= TOP BAR: a pint per round ================= -->
+  <header id="topbar" class="topbar">
+    <a href="#top" class="topbar-mark">Matt &amp; Dasha</a>
+    <nav class="pints" aria-label="Rounds">
+      <a href="#lads" data-round="lads" aria-label="Round one, the lads"><svg viewBox="0 0 20 28" aria-hidden="true"><use href="#pint"/></svg><span aria-hidden="true">1</span></a>
+      <a href="#quiz-round" data-round="quiz-round" aria-label="Round two, the quiz"><svg viewBox="0 0 20 28" aria-hidden="true"><use href="#pint"/></svg><span aria-hidden="true">2</span></a>
+      <a href="#board" data-round="board" aria-label="Round three, the board"><svg viewBox="0 0 20 28" aria-hidden="true"><use href="#pint"/></svg><span aria-hidden="true">3</span></a>
+      <a href="#last-call" data-round="last-call" aria-label="Round four, last call"><svg viewBox="0 0 20 28" aria-hidden="true"><use href="#pint"/></svg><span aria-hidden="true">4</span></a>
+    </nav>
+    <span class="topbar-date">Xàtiva 2027</span>
+  </header>
+
+  <main id="site" class="site" aria-hidden="true">
+
+    <!-- ================= HERO: the beach bar at sunset ================= -->
+    <section id="top" class="hero">
+      <svg class="scene" viewBox="0 0 1200 760" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+        <defs>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#0f3a43"/>
+            <stop offset=".3" stop-color="#2a6f73"/>
+            <stop offset=".5" stop-color="#d9a273"/>
+            <stop offset=".62" stop-color="#f3a660"/>
+          </linearGradient>
+          <linearGradient id="sun" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#ffd977"/>
+            <stop offset=".55" stop-color="#f59a3b"/>
+            <stop offset="1" stop-color="#e2582b"/>
+          </linearGradient>
+          <mask id="sun-cut" maskUnits="userSpaceOnUse" x="0" y="0" width="1200" height="760">
+            <rect width="1200" height="760" fill="#fff"/>
+            <g fill="#000"><rect x="0" y="398" width="1200" height="3"/><rect x="0" y="414" width="1200" height="4.5"/><rect x="0" y="429" width="1200" height="6"/><rect x="0" y="444" width="1200" height="7.5"/><rect x="0" y="458" width="1200" height="9"/></g>
+          </mask>
+          <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#2b7d7e"/>
+            <stop offset="1" stop-color="#175a60"/>
+          </linearGradient>
+          <linearGradient id="sand" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#efcf96"/>
+            <stop offset="1" stop-color="#d9a868"/>
+          </linearGradient>
+          <radialGradient id="barglow" cx="50%" cy="40%" r="60%">
+            <stop offset="0" stop-color="rgba(255,200,120,.75)"/>
+            <stop offset="1" stop-color="rgba(255,200,120,0)"/>
+          </radialGradient>
+          <filter id="glow" x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+
+        <rect class="sky" width="1200" height="760" fill="url(#sky)"/>
+        <g class="stars" fill="#fbf1dc"><circle cx="90" cy="50" r="1.1"/><circle cx="260" cy="110" r=".8"/><circle cx="420" cy="40" r="1"/><circle cx="760" cy="70" r=".9"/><circle cx="930" cy="30" r="1.2"/><circle cx="1110" cy="120" r=".8"/><circle cx="560" cy="150" r=".7"/></g>
+
+        <!-- The sun going down, 70s style -->
+        <g data-depth="0.06">
+          <circle cx="640" cy="470" r="150" fill="url(#sun)" mask="url(#sun-cut)"/>
+        </g>
+
+        <!-- Headlands -->
+        <g data-depth="0.16">
+          <path fill="#8a5560" d="M0,438 Q110,372 250,420 Q300,440 360,470 H0 Z"/>
+          <path fill="#a8696a" d="M870,470 Q960,430 1060,426 Q1140,424 1200,440 V470 Z"/>
+        </g>
+
+        <!-- Sea -->
+        <g data-depth="0.24">
+          <rect x="0" y="468" width="1200" height="140" fill="url(#sea)"/>
+          <rect x="0" y="468" width="1200" height="2" fill="#f7c27a" opacity=".7"/>
+          <g class="refl" fill="#f7b25a"><rect style="--i:0" x="515.0" y="482" width="250" height="3.0" rx="1.5"/><rect style="--i:1" x="535.0" y="494" width="210" height="3.4" rx="1.5"/><rect style="--i:2" x="552.0" y="507" width="176" height="3.8" rx="1.5"/><rect style="--i:3" x="570.0" y="521" width="140" height="4.2" rx="1.5"/><rect style="--i:4" x="586.0" y="537" width="108" height="4.6" rx="1.5"/><rect style="--i:5" x="600.0" y="554" width="80" height="5.0" rx="1.5"/><rect style="--i:6" x="612.0" y="572" width="56" height="5.4" rx="1.5"/><rect style="--i:7" x="622.0" y="590" width="36" height="5.8" rx="1.5"/></g>
+          <path class="foam" d="M0,604 q30,-8 60,0 t60,0 t60,0 t60,0 t60,0 t60,0 t60,0 t60,0 t60,0 t60,0 t60,0 t60,0 t60,0 t60,0 t60,0 t60,0 t60,0 t60,0 t60,0 t60,0"/>
+        </g>
+
+        <!-- Sand -->
+        <g data-depth="0.4">
+          <rect x="0" y="600" width="1200" height="160" fill="url(#sand)"/>
+        </g>
+
+        <!-- Palms and the festoon lights between them -->
+        <g data-depth="0.55">
+          <g class="palm"><path class="trunk" d="M119,712 Q191.5,506.0 180,300 L190,300 Q203.5,506.0 141,712 Z"/><g class="rings"><path d="M128.7,682.6 q10.6,4.0 21.1,0"/><path d="M137.5,653.1 q10.1,4.0 20.3,0"/><path d="M145.5,623.7 q9.7,4.0 19.4,0"/><path d="M152.8,594.3 q9.3,4.0 18.6,0"/><path d="M159.2,564.9 q8.9,4.0 17.7,0"/><path d="M164.7,535.4 q8.4,4.0 16.9,0"/><path d="M169.5,506.0 q8.0,4.0 16.0,0"/><path d="M173.4,476.6 q7.6,4.0 15.1,0"/><path d="M176.6,447.1 q7.1,4.0 14.3,0"/><path d="M178.9,417.7 q6.7,4.0 13.4,0"/><path d="M180.4,388.3 q6.3,4.0 12.6,0"/><path d="M181.1,358.9 q5.9,4.0 11.7,0"/><path d="M180.9,329.4 q5.4,4.0 10.9,0"/></g><g class="fronds"><path d="M185,300 Q122.9,250.4 72.2,301.0 Q123.0,268.6 185,300 Z"/><path d="M185,300 Q142.6,216.1 95.0,241.8 Q132.7,231.4 185,300 Z"/><path d="M185,300 Q193.3,232.2 176.7,238.6 Q175.3,234.6 185,300 Z"/><path d="M185,300 Q231.5,230.7 252.5,230.3 Q218.4,218.1 185,300 Z"/><path d="M185,300 Q245.9,271.1 293.8,291.3 Q244.4,252.9 185,300 Z"/><path d="M185,300 Q230.4,306.6 278.6,349.7 Q238.9,290.5 185,300 Z"/><path d="M185,300 Q136.0,260.2 98.1,308.2 Q137.7,278.4 185,300 Z"/></g></g><g class="palm"><path class="trunk" d="M1079,712 Q1019.0,500.0 1035,288 L1045,288 Q1031.0,500.0 1101,712 Z"/><g class="rings"><path d="M1070.6,681.7 q10.6,4.0 21.1,0"/><path d="M1062.9,651.4 q10.1,4.0 20.3,0"/><path d="M1056.1,621.1 q9.7,4.0 19.4,0"/><path d="M1050.1,590.9 q9.3,4.0 18.6,0"/><path d="M1044.9,560.6 q8.9,4.0 17.7,0"/><path d="M1040.6,530.3 q8.4,4.0 16.9,0"/><path d="M1037.0,500.0 q8.0,4.0 16.0,0"/><path d="M1034.3,469.7 q7.6,4.0 15.1,0"/><path d="M1032.3,439.4 q7.1,4.0 14.3,0"/><path d="M1031.2,409.1 q6.7,4.0 13.4,0"/><path d="M1031.0,378.9 q6.3,4.0 12.6,0"/><path d="M1031.5,348.6 q5.9,4.0 11.7,0"/><path d="M1032.8,318.3 q5.4,4.0 10.9,0"/></g><g class="fronds"><path d="M1040,288 Q977.9,238.4 927.2,289.0 Q978.0,256.6 1040,288 Z"/><path d="M1040,288 Q997.6,204.1 950.0,229.8 Q987.7,219.4 1040,288 Z"/><path d="M1040,288 Q1048.3,220.2 1031.7,226.6 Q1030.3,222.6 1040,288 Z"/><path d="M1040,288 Q1086.5,218.7 1107.5,218.3 Q1073.4,206.1 1040,288 Z"/><path d="M1040,288 Q1100.9,259.1 1148.8,279.3 Q1099.4,240.9 1040,288 Z"/><path d="M1040,288 Q1085.4,294.6 1133.6,337.7 Q1093.9,278.5 1040,288 Z"/><path d="M1040,288 Q991.0,248.2 953.1,296.2 Q992.7,266.4 1040,288 Z"/></g></g>
+          <path class="wire" d="M186,312 Q612,530 1038,300"/>
+          <g class="festoon" filter="url(#glow)"><g style="--i:1"><path class="drop" d="M224.7,330.9 v7"/><rect class="cap" x="222.2" y="336.9" width="5" height="4"/><circle class="bulb" cx="224.7" cy="344.9" r="5"/></g><g style="--i:2"><path class="drop" d="M263.5,347.9 v7"/><rect class="cap" x="261.0" y="353.9" width="5" height="4"/><circle class="bulb" cx="263.5" cy="361.9" r="5"/></g><g style="--i:3"><path class="drop" d="M302.2,363.1 v7"/><rect class="cap" x="299.7" y="369.1" width="5" height="4"/><circle class="bulb" cx="302.2" cy="377.1" r="5"/></g><g style="--i:4"><path class="drop" d="M340.9,376.5 v7"/><rect class="cap" x="338.4" y="382.5" width="5" height="4"/><circle class="bulb" cx="340.9" cy="390.5" r="5"/></g><g style="--i:5"><path class="drop" d="M379.6,388.0 v7"/><rect class="cap" x="377.1" y="394.0" width="5" height="4"/><circle class="bulb" cx="379.6" cy="402.0" r="5"/></g><g style="--i:6"><path class="drop" d="M418.4,397.6 v7"/><rect class="cap" x="415.9" y="403.6" width="5" height="4"/><circle class="bulb" cx="418.4" cy="411.6" r="5"/></g><g style="--i:7"><path class="drop" d="M457.1,405.4 v7"/><rect class="cap" x="454.6" y="411.4" width="5" height="4"/><circle class="bulb" cx="457.1" cy="419.4" r="5"/></g><g style="--i:8"><path class="drop" d="M495.8,411.3 v7"/><rect class="cap" x="493.3" y="417.3" width="5" height="4"/><circle class="bulb" cx="495.8" cy="425.3" r="5"/></g><g style="--i:9"><path class="drop" d="M534.5,415.4 v7"/><rect class="cap" x="532.0" y="421.4" width="5" height="4"/><circle class="bulb" cx="534.5" cy="429.4" r="5"/></g><g style="--i:10"><path class="drop" d="M573.3,417.6 v7"/><rect class="cap" x="570.8" y="423.6" width="5" height="4"/><circle class="bulb" cx="573.3" cy="431.6" r="5"/></g><g style="--i:11"><path class="drop" d="M612.0,418.0 v7"/><rect class="cap" x="609.5" y="424.0" width="5" height="4"/><circle class="bulb" cx="612.0" cy="432.0" r="5"/></g><g style="--i:12"><path class="drop" d="M650.7,416.5 v7"/><rect class="cap" x="648.2" y="422.5" width="5" height="4"/><circle class="bulb" cx="650.7" cy="430.5" r="5"/></g><g style="--i:13"><path class="drop" d="M689.5,413.2 v7"/><rect class="cap" x="687.0" y="419.2" width="5" height="4"/><circle class="bulb" cx="689.5" cy="427.2" r="5"/></g><g style="--i:14"><path class="drop" d="M728.2,408.0 v7"/><rect class="cap" x="725.7" y="414.0" width="5" height="4"/><circle class="bulb" cx="728.2" cy="422.0" r="5"/></g><g style="--i:15"><path class="drop" d="M766.9,401.0 v7"/><rect class="cap" x="764.4" y="407.0" width="5" height="4"/><circle class="bulb" cx="766.9" cy="415.0" r="5"/></g><g style="--i:16"><path class="drop" d="M805.6,392.1 v7"/><rect class="cap" x="803.1" y="398.1" width="5" height="4"/><circle class="bulb" cx="805.6" cy="406.1" r="5"/></g><g style="--i:17"><path class="drop" d="M844.4,381.4 v7"/><rect class="cap" x="841.9" y="387.4" width="5" height="4"/><circle class="bulb" cx="844.4" cy="395.4" r="5"/></g><g style="--i:18"><path class="drop" d="M883.1,368.8 v7"/><rect class="cap" x="880.6" y="374.8" width="5" height="4"/><circle class="bulb" cx="883.1" cy="382.8" r="5"/></g><g style="--i:19"><path class="drop" d="M921.8,354.4 v7"/><rect class="cap" x="919.3" y="360.4" width="5" height="4"/><circle class="bulb" cx="921.8" cy="368.4" r="5"/></g><g style="--i:20"><path class="drop" d="M960.5,338.1 v7"/><rect class="cap" x="958.0" y="344.1" width="5" height="4"/><circle class="bulb" cx="960.5" cy="352.1" r="5"/></g><g style="--i:21"><path class="drop" d="M999.3,320.0 v7"/><rect class="cap" x="996.8" y="326.0" width="5" height="4"/><circle class="bulb" cx="999.3" cy="334.0" r="5"/></g></g>
+        </g>
+
+        <!-- The beach bar, umbrellas and loungers -->
+        <g data-depth="0.8">
+          <g transform="translate(-60 0)">
+          <ellipse cx="420" cy="712" rx="210" ry="14" fill="rgba(90,52,36,.25)"/>
+          <rect class="bar-back" x="282" y="520" width="276" height="90"/>
+          <rect class="bar-glow" x="282" y="520" width="276" height="90" fill="url(#barglow)"/>
+          <g class="bottles">
+            <rect x="300" y="560" width="8" height="22" rx="2" fill="#2e6b3c"/><rect x="312" y="556" width="8" height="26" rx="2" fill="#a4621f"/><rect x="324" y="562" width="8" height="20" rx="2" fill="#2e6b3c"/>
+            <rect x="500" y="558" width="8" height="24" rx="2" fill="#a4621f"/><rect x="512" y="562" width="8" height="20" rx="2" fill="#7a2f22"/><rect x="524" y="556" width="8" height="26" rx="2" fill="#2e6b3c"/>
+            <rect x="292" y="582" width="256" height="4" fill="#5b3424"/>
+          </g>
+          <path class="post" d="M276,520 V708 M564,520 V708"/>
+          <path class="thatch" d="M232,524 L276,468 H564 L608,524 Z"/>
+          <path class="fringe" d="M232,524 l9,14 l9,-14 l9,14 l9,-14 l9,14 l9,-14 l9,14 l9,-14 l9,14 l9,-14 l9,14 l9,-14 l9,14 l9,-14 l9,14 l9,-14 l9,14 l9,-14 l9,14 l9,-14 l9,14 l9,-14 l9,14 l9,-14 l9,14 l9,-14 l9,14 l9,-14 l9,14 l9,-14 l9,14 l9,-14 l9,14 l9,-14 l9,14 l9,-14 l9,14 l9,-14 l9,14 l9,-14 Z"/>
+          <path class="thatch-lines" d="M290,476 L262,522 M330,476 L312,522 M370,476 L362,522 M420,476 L420,522 M470,476 L478,522 M510,476 L528,522 M550,476 L578,522"/>
+          <g class="sign">
+            <rect x="328" y="540" width="184" height="46" rx="4"/>
+            <rect x="333" y="545" width="174" height="36" rx="2" class="sign-line"/>
+            <text x="420" y="572" text-anchor="middle">Matt &amp; Dasha</text>
+          </g>
+          <use href="#robin" x="474" y="500" width="58" height="52"/>
+          <rect class="counter-top" x="270" y="604" width="300" height="12"/>
+          <path class="counter" d="M282,616 H558 V706 H282 Z"/>
+          <path class="planks" d="M306,616 V706 M330,616 V706 M354,616 V706 M378,616 V706 M402,616 V706 M426,616 V706 M450,616 V706 M474,616 V706 M498,616 V706 M522,616 V706 M546,616 V706"/>
+          <path class="stripe-band" d="M282,640 H558 M282,650 H558 M282,660 H558"/>
+          <g class="stools"><path d="M318,706 V650 M346,706 V650 M490,706 V650 M518,706 V650"/><rect x="310" y="644" width="44" height="7" rx="3"/><rect x="482" y="644" width="44" height="7" rx="3"/></g>
+          </g>
+          <g class="umbrellas"><path class="pole" d="M800,530 V706"/><path class="u2" d="M800,514 L722.0,552.0 Q725.0,560.0 727.9,552.0 Z"/><path class="u1" d="M800,514 L727.9,552.0 Q736.4,560.0 744.8,552.0 Z"/><path class="u2" d="M800,514 L744.8,552.0 Q757.5,560.0 770.2,552.0 Z"/><path class="u1" d="M800,514 L770.2,552.0 Q785.1,560.0 800.0,552.0 Z"/><path class="u2" d="M800,514 L800.0,552.0 Q814.9,560.0 829.8,552.0 Z"/><path class="u1" d="M800,514 L829.8,552.0 Q842.5,560.0 855.2,552.0 Z"/><path class="u2" d="M800,514 L855.2,552.0 Q863.6,560.0 872.1,552.0 Z"/><path class="u1" d="M800,514 L872.1,552.0 Q875.0,560.0 878.0,552.0 Z"/><circle class="pole-top" cx="800" cy="513" r="3.5"/><path class="pole" d="M975,550 V712"/><path class="u2" d="M975,534 L905.0,572.0 Q907.7,580.0 910.3,572.0 Z"/><path class="u1" d="M975,534 L910.3,572.0 Q917.9,580.0 925.5,572.0 Z"/><path class="u2" d="M975,534 L925.5,572.0 Q936.9,580.0 948.2,572.0 Z"/><path class="u1" d="M975,534 L948.2,572.0 Q961.6,580.0 975.0,572.0 Z"/><path class="u2" d="M975,534 L975.0,572.0 Q988.4,580.0 1001.8,572.0 Z"/><path class="u1" d="M975,534 L1001.8,572.0 Q1013.1,580.0 1024.5,572.0 Z"/><path class="u2" d="M975,534 L1024.5,572.0 Q1032.1,580.0 1039.7,572.0 Z"/><path class="u1" d="M975,534 L1039.7,572.0 Q1042.3,580.0 1045.0,572.0 Z"/><circle class="pole-top" cx="975" cy="533" r="3.5"/></g>
+          <g class="lounger"><path d="M742,700 L770,660 L860,660 L866,700" class="frame"/><path d="M770,660 L790,630 L812,660 Z" class="cloth"/><rect x="772" y="652" width="88" height="10" class="cloth"/></g>
+          <g class="lounger"><path d="M928,706 L950,670 L1020,670 L1026,706" class="frame"/><rect x="950" y="662" width="70" height="9" class="cloth"/></g>
+        </g>
+
+        <!-- Foreground sand -->
+        <g data-depth="1">
+          <path fill="#e2b77a" d="M0,722 Q300,706 600,716 T1200,712 V760 H0 Z"/>
+          <path class="ripples" d="M60,740 q40,-6 80,0 M240,748 q50,-6 100,0 M760,742 q50,-6 100,0 M980,750 q40,-6 80,0"/>
+        </g>
+      </svg>
+
+      <div class="hero-copy">
+        <div class="hero-top">
+          <p class="hero-kicker">For Mitch, Brad &amp; Liam</p>
+          <!-- EDIT -->
+          <h1 class="hero-title">Dasha said yes. <span>Your turn, lads.</span></h1>
+          <!-- EDIT -->
+          <p class="hero-sub">Matt &amp; Dasha are getting married in Spain. There’s a stag to sort, speeches to write and a groom to keep upright. Four rounds first, then the question.</p>
+        </div>
+        <div class="hero-bottom">
+          <a class="hero-cue" href="#lads">Get the beers in</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= ROUND 1: THE LADS ================= -->
+    <section id="lads" class="chapter" aria-labelledby="ch1">
+      <header class="chapter-head">
+        <span class="chapter-no" aria-hidden="true">1</span>
+        <div>
+          <h2 id="ch1" class="chapter-title">The lads</h2>
+          <!-- EDIT -->
+          <p class="chapter-intro">Ashton Gate, a pint in the Robins first, away trips abroad on pure hope. We always turn up expecting the best and leave disappointed. Then North Street, Keynsham, the Thekla, town, and somehow Popworld. Chat shit for hours, music up, another Thatchers. Wouldn’t change a thing.</p>
+        </div>
+      </header>
+
+      <p class="game-status">Three postcards. Turn each one over.</p>
+
+      <!-- EDIT: one postcard per lad. Front: name and how long. Back: the message. Below: the memory. -->
+      <ul class="cards" id="cards">
+        <li>
+          <button type="button" class="card card-teal" aria-label="Turn over Mitch’s postcard">
+            <span class="card-inner">
+              <span class="card-face card-front">
+                <span class="card-greet">Greetings from</span>
+                <strong class="card-name">Mitch</strong>
+                <span class="card-sub">The brother</span>
+              </span>
+              <span class="card-face card-back">
+                <span class="card-msg">Didn’t get a say in it, but here we are. Known me longer than anyone and still answers the phone.</span>
+                <span class="card-addr"><svg class="card-stamp" viewBox="0 0 80 96" aria-hidden="true"><use href="#stamp"/></svg><span>Mitch</span><span>Whitchurch</span><span>Bristol</span></span>
+              </span>
+            </span>
+          </button>
+          <p class="card-memory" hidden>[One memory only the two of you would get.]</p>
+        </li>
+        <li>
+          <button type="button" class="card card-orange" aria-label="Turn over Brad’s postcard">
+            <span class="card-inner">
+              <span class="card-face card-front">
+                <span class="card-greet">Greetings from</span>
+                <strong class="card-name">Brad</strong>
+                <span class="card-sub">Since school</span>
+              </span>
+              <span class="card-face card-back">
+                <span class="card-msg">If Brad says he’ll be there, he’s there. Early, with a spare charger. Been that way since we were kids.</span>
+                <span class="card-addr"><svg class="card-stamp" viewBox="0 0 80 96" aria-hidden="true"><use href="#stamp"/></svg><span>Brad Meaker</span><span>Whitchurch</span><span>Bristol</span></span>
+              </span>
+            </span>
+          </button>
+          <p class="card-memory" hidden>[The time Brad came through.]</p>
+        </li>
+        <li>
+          <button type="button" class="card card-mustard" aria-label="Turn over Liam’s postcard">
+            <span class="card-inner">
+              <span class="card-face card-front">
+                <span class="card-greet">Greetings from</span>
+                <strong class="card-name">Liam</strong>
+                <span class="card-sub">Since the first kickabout</span>
+              </span>
+              <span class="card-face card-back">
+                <span class="card-msg">Been passing to him since we were kids. Still waiting for one back. Grew up on the same pitches, and he’s been there for every match since.</span>
+                <span class="card-addr"><svg class="card-stamp" viewBox="0 0 80 96" aria-hidden="true"><use href="#stamp"/></svg><span>Liam</span><span>Whitchurch</span><span>Bristol</span></span>
+              </span>
+            </span>
+          </button>
+          <p class="card-memory" hidden>[The team, the goal, or the red card.]</p>
+        </li>
+      </ul>
+
+      <p id="card-status" class="sr-only" role="status" aria-live="polite"></p>
+      <div id="lads-done" class="done" hidden>
+        <!-- EDIT -->
+        <p class="done-text">Cheers for sticking around this long. You’re not off the hook yet.</p>
+        <a class="next-link" href="#quiz-round">On to the quiz</a>
+      </div>
+    </section>
+
+    <!-- ================= ROUND 2: THE QUIZ ================= -->
+    <section id="quiz-round" class="chapter chapter-sea" aria-labelledby="ch2">
+      <header class="chapter-head">
+        <span class="chapter-no" aria-hidden="true">2</span>
+        <div>
+          <h2 id="ch2" class="chapter-title">The quiz</h2>
+          <p class="chapter-intro">A short assessment of your suitability for the role. Answer honestly. Your quizmaster is the groom, and he’s marking.</p>
+        </div>
+      </header>
+
+      <div class="sheet">
+        <div class="sheet-head">
+          <p class="sheet-bar">Bar Matt &amp; Dasha</p>
+          <p class="sheet-score">Score <span id="score">0</span></p>
+        </div>
+        <!-- EDIT: questions, answers, right answers (data-correct) and the replies -->
+        <ol class="quiz" id="quiz">
+          <li class="q is-current">
+            <p class="q-text">2am. The groom is being sick behind a sun lounger. You…</p>
+            <div class="q-answers">
+              <button type="button" class="ans" data-correct data-reply="Correct. Rub his back, hand him a water, say nothing.">Rub his back and hand him a water</button>
+              <button type="button" class="ans" data-correct data-reply="Also correct. Evidence matters.">Hold him steady and film it</button>
+              <button type="button" class="ans" data-reply="Wrong. Nobody gets left on the beach.">Walk off and deny all knowledge</button>
+            </div>
+            <p class="q-reply" aria-live="polite"></p>
+          </li>
+          <li class="q">
+            <p class="q-text">The groom has mentioned triathlon for the fourth time tonight. You…</p>
+            <div class="q-answers">
+              <button type="button" class="ans" data-correct data-reply="Correct. Works every time.">Change the subject to City</button>
+              <button type="button" class="ans" data-reply="Rookie error. That’s another forty minutes.">Ask about his transition times</button>
+              <button type="button" class="ans" data-correct data-reply="Correct. Bold, but effective.">Hide his watch</button>
+            </div>
+            <p class="q-reply" aria-live="polite"></p>
+          </li>
+          <li class="q">
+            <p class="q-text">How many times have we left Ashton Gate saying “never again”?</p>
+            <div class="q-answers">
+              <button type="button" class="ans" data-correct data-reply="Correct. Back the next week, every time.">Too many to count</button>
+              <button type="button" class="ans" data-correct data-reply="Correct. And back the next week.">Once a season, minimum</button>
+              <button type="button" class="ans" data-reply="Lies. You’ve said it. We all have.">Never. I’m a believer.</button>
+            </div>
+            <p class="q-reply" aria-live="polite"></p>
+          </li>
+          <li class="q">
+            <p class="q-text">Away trip abroad. We lose 3–0. Next move?</p>
+            <div class="q-answers">
+              <button type="button" class="ans" data-correct data-reply="Correct. Tradition.">Find a bar and chat shit till sunrise</button>
+              <button type="button" class="ans" data-correct data-reply="Correct. Hope is a terrible thing.">Book next season’s trip</button>
+              <button type="button" class="ans" data-reply="Wrong. Nobody goes home early.">Early night</button>
+            </div>
+            <p class="q-reply" aria-live="polite"></p>
+          </li>
+          <li class="q">
+            <p class="q-text">1am in town. The groom says “Popworld?” You say…</p>
+            <div class="q-answers">
+              <button type="button" class="ans" data-correct data-reply="Correct. Always.">Obviously</button>
+              <button type="button" class="ans" data-correct data-reply="Correct, and fair.">Only if it’s his round</button>
+              <button type="button" class="ans" data-reply="Wrong. The answer is always yes.">No</button>
+            </div>
+            <p class="q-reply" aria-live="polite"></p>
+          </li>
+        </ol>
+      </div>
+
+      <div id="verdict" class="verdict" hidden>
+        <p class="verdict-text" id="verdict-text">Fit for duty.</p>
+        <a class="next-link" href="#board">On to the board</a>
+      </div>
+    </section>
+
+    <!-- ================= ROUND 3: THE BOARD ================= -->
+    <section id="board" class="chapter" aria-labelledby="ch3">
+      <header class="chapter-head">
+        <span class="chapter-no" aria-hidden="true">3</span>
+        <div>
+          <h2 id="ch3" class="chapter-title">The board</h2>
+          <p class="chapter-intro">The details, in chalk. Wipe each line to read it.</p>
+        </div>
+      </header>
+
+      <div class="slate">
+        <p class="slate-title">Matt &amp; Dasha</p>
+        <!-- EDIT: venue and date -->
+        <dl class="slate-rows">
+          <div class="slate-row"><dt>Where</dt><dd><span class="chalk-text" aria-hidden="true">Xàtiva, Spain. [Venue]</span><button type="button" class="wipe">Wipe where</button></dd></div>
+          <div class="slate-row"><dt>When</dt><dd><span class="chalk-text" aria-hidden="true">[Date], 2027</span><button type="button" class="wipe">Wipe when</button></dd></div>
+          <div class="slate-row"><dt>The stag</dt><dd><span class="chalk-text" aria-hidden="true">To be decided. By you.</span><button type="button" class="wipe">Wipe the stag</button></dd></div>
+          <div class="slate-row"><dt>Forecast</dt><dd><span class="chalk-text" aria-hidden="true">Hot. Factor 50.</span><button type="button" class="wipe">Wipe the forecast</button></dd></div>
+        </dl>
+      </div>
+      <a id="board-next" class="next-link" href="#last-call" hidden>Last call</a>
+    </section>
+
+    <!-- ================= ROUND 4: LAST CALL ================= -->
+    <section id="last-call" class="ask" aria-labelledby="ask-title">
+      <header class="chapter-head chapter-head-center">
+        <span class="chapter-no" aria-hidden="true">4</span>
+        <h2 id="ask-title" class="chapter-title">Last call</h2>
+      </header>
+
+      <div id="bottle-wrap" class="bottle-wrap">
+        <div class="bottle-stage" id="bottle-stage">
+          <svg class="bottle-art" viewBox="0 0 160 320" aria-hidden="true">
+            <g class="bottle-body">
+              <path d="M68,20 H92 V86 C92,108 124,118 124,150 V296 Q124,306 114,306 H46 Q36,306 36,296 V150 C36,118 68,108 68,86 Z" fill="#1f5a3a"/>
+              <path d="M66,14 H94 V82 C94,92 98,98 104,104 H56 C62,98 66,92 66,82 Z" fill="#d9a33f"/>
+              <path d="M66,14 H94 V22 H66 Z" fill="#b8862f"/>
+              <rect x="44" y="176" width="72" height="84" rx="4" fill="#fbf1dc"/>
+              <rect x="44" y="190" width="72" height="5" fill="#e8622c"/><rect x="44" y="198" width="72" height="5" fill="#f2a03d"/><rect x="44" y="206" width="72" height="5" fill="#1f6b70"/>
+              <text x="80" y="234" text-anchor="middle" font-family="Yellowtail, cursive" font-size="20" fill="#5b3424">Cava</text>
+              <text x="80" y="250" text-anchor="middle" font-family="Jost, sans-serif" font-size="8" font-weight="600" fill="#5b3424" letter-spacing="1">XÀTIVA 2027</text>
+              <path d="M50,130 C46,160 46,240 48,290" stroke="rgba(255,255,255,.2)" stroke-width="6" fill="none" stroke-linecap="round"/>
+            </g>
+            <g class="cork"><rect x="70" y="0" width="20" height="18" rx="4" fill="#c99a5b"/><rect x="70" y="0" width="20" height="5" rx="2" fill="#e0b97c"/></g>
+          </svg>
+          <button type="button" id="pop" class="pop-btn" aria-describedby="pop-hint" aria-label="Pop the cava and open your letter">
+            <svg class="pop-ring" viewBox="0 0 140 140" aria-hidden="true"><circle cx="70" cy="70" r="66" pathLength="1"/></svg>
+          </button>
+        </div>
+        <p class="pop-cta" id="pop-hint">Press and hold the bottle to pop it</p>
+      </div>
+
+      <article id="letter" class="letter" hidden>
+        <div class="letter-paper">
+          <div class="letter-top">
+            <p class="airmail">Por avión</p>
+            <svg class="letter-stamp" viewBox="0 0 80 96" aria-hidden="true"><use href="#stamp"/></svg>
+          </div>
+          <!-- EDIT: the letter -->
+          <h3 id="letter-title" class="letter-greeting" tabindex="-1">Mitch, Brad, Liam,</h3>
+          <p>Dasha and I are getting married in Xàtiva in 2027.</p>
+          <p>You three have been there for all of it. Ashton Gate, away days, North Street, the Thekla, Popworld, and more bad results than any of us can count.</p>
+          <p>At the front it’ll be Dasha and me. Around us, I want you three.</p>
+          <p class="letter-question">Will you be my groomsmen?</p>
+
+          <!-- EDIT: the job. Add, remove or reword as you like. -->
+          <section class="duties" aria-labelledby="duties-title">
+            <h4 id="duties-title" class="duties-title">The job</h4>
+            <dl>
+              <div><dt>The stag</dt><dd>Where, when, who and how much. All yours. I’ll turn up where I’m told.</dd></div>
+              <div><dt>The speeches</dt><dd>A few words at the reception. Dasha’s family will be listening. Don’t worry, most of them don’t really speak English anyway.</dd></div>
+              <div><dt>The day</dt><dd>Keep the groom calm, fed and roughly on time.</dd></div>
+              <div><dt>Everything else</dt><dd>Further requests to follow nearer the time. Non-negotiable.</dd></div>
+            </dl>
+          </section>
+
+          <p class="letter-sign">Cheers,<span>Matt</span></p>
+
+          <div class="accept" id="accept">
+            <p class="accept-title" id="sign-label">Sign to accept</p>
+            <div class="sign-pad">
+              <canvas id="sign-canvas" aria-labelledby="sign-label"></canvas>
+              <span class="sign-line" aria-hidden="true">Your signature</span>
+              <button type="button" id="sign-clear" class="sign-clear">Clear</button>
+              <div id="mark-slot" class="mark-slot" aria-hidden="true"></div>
+            </div>
+            <label class="sign-typed">
+              <span>Or type your name</span>
+              <input id="sign-name" type="text" autocomplete="off" spellcheck="false" />
+            </label>
+            <div class="choices">
+              <button type="button" id="sign-answer" class="btn btn-teal" disabled>Go on then</button>
+              <button type="button" id="no-choice" class="btn btn-line">Do I have a choice?</button>
+            </div>
+            <p id="no-choice-reply" class="no-choice-reply" aria-live="polite"></p>
+          </div>
+
+          <div id="confirmation" class="confirmation" role="status" aria-live="polite" hidden>
+            <p class="confirmation-main">Signed. Pints on me. See you in Xàtiva.</p>
+            <p class="confirmation-next">First job: the stag. The group chat’s yours.</p>
+          </div>
+
+          <!-- EDIT: house rules -->
+          <aside class="terms" aria-label="House rules">
+            <h4>House rules</h4>
+            <ol>
+              <li>What happens on the stag stays on the stag. (Dasha, that’s a joke.)</li>
+              <li>Factor 50 is compulsory. Nobody’s in the photos looking like a lobster.</li>
+              <li>Acceptance is binding, plus one dance with an auntie of my choosing.</li>
+            </ol>
+          </aside>
+        </div>
+      </article>
+    </section>
+
+    <footer class="site-footer">
+      <p>Whitchurch to Xàtiva. Thatchers in the fridge.</p>
+    </footer>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
