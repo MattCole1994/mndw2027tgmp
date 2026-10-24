@@ -1,7 +1,7 @@
 /* =========================================================
-   IRONMAN XÀTIVA — Groomsmen Qualifier
-   Gate, parallax course, 4 triathlon legs, bullet-proof
-   bottle pop, and Ironman Souvenir Race Bib generator.
+   IRONMAN 140.6 XÀTIVA | Groomsmen World Championship
+   Gate, 3.8km Swim, 180km Bike, 42.2km Run, 140.6 Finisher
+   Medal Ceremony, and Official WTC Race Bib Souvenir.
    ========================================================= */
 
 // SHA-256 of the passcode. Default passcode is "ashtongate".
@@ -29,7 +29,7 @@ if (urlLad && LADS_MAP[urlLad]) {
   selectedLad = LADS_MAP[urlLad].name;
   selectedBib = LADS_MAP[urlLad].bib;
   const heroTurn = $("#hero-turn");
-  if (heroTurn) heroTurn.textContent = `To the start line, ${selectedLad}.`;
+  if (heroTurn) heroTurn.textContent = `ZIP UP YOUR WETSUIT, ${selectedLad.toUpperCase()}.`;
 }
 
 /* ---------- Hashing ---------- */
@@ -76,14 +76,14 @@ function rejectAttempt(message) {
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const attempt = input.value.trim().toLowerCase();
-  if (!attempt) { rejectAttempt("Enter the passcode to clear Transition 1."); return; }
-  if (!window.crypto || !crypto.subtle) { rejectAttempt("This browser can’t check the passcode. Open the link over https."); return; }
+  if (!attempt) { rejectAttempt("Enter the security code to rack your bike."); return; }
+  if (!window.crypto || !crypto.subtle) { rejectAttempt("This browser cannot check the code. Open the link over https."); return; }
   if ((await sha256(attempt)) === TARGET_HASH) {
     errorEl.textContent = "";
     rememberUnlock();
     unlock();
   } else {
-    rejectAttempt("Penalty Card! Wrong answer. Think every other Saturday in BS3.");
+    rejectAttempt("Doping Control Failure! Think every other Saturday in BS3.");
   }
 });
 input.addEventListener("input", () => { input.classList.remove("is-invalid"); errorEl.textContent = ""; });
@@ -122,7 +122,7 @@ if ("IntersectionObserver" in window) {
   ids.forEach((id) => { const el = document.getElementById(id); if (el) roundObserver.observe(el); });
 }
 
-/* ---------- Hero parallax (pointer, tilt and scroll) ---------- */
+/* ---------- Hero parallax ---------- */
 const layers = $$(".scene [data-depth]").map((g) => ({ g, d: parseFloat(g.dataset.depth) }));
 if (!reduceMotion && layers.length) {
   const target = { x: 0, y: 0 };
@@ -155,20 +155,11 @@ if (!reduceMotion && layers.length) {
     kick();
   });
   hero.addEventListener("pointerleave", () => { target.x = 0; target.y = 0; kick(); });
-
-  if (window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission !== "function") {
-    window.addEventListener("deviceorientation", (e) => {
-      if (e.gamma == null) return;
-      target.x = Math.max(-0.5, Math.min(0.5, e.gamma / 50));
-      target.y = Math.max(-0.5, Math.min(0.5, (e.beta - 45) / 80));
-      kick();
-    });
-  }
   window.addEventListener("scroll", () => { if (window.scrollY < window.innerHeight * 1.2) kick(); }, { passive: true });
 }
 
 /* ---------- Confetti ---------- */
-const PALETTE = ["#c8352a", "#e8622c", "#f2a03d", "#e9b949", "#1f6b70", "#fbf1dc"];
+const PALETTE = ["#e31837", "#ffb800", "#ffffff", "#d49a2a", "#14161d"];
 
 function celebrate() {
   if (typeof window.confetti !== "function") return;
@@ -176,16 +167,16 @@ function celebrate() {
     confetti({ particleCount: 70, spread: 90, origin: { y: 0.6 }, colors: PALETTE, disableForReducedMotion: false });
     return;
   }
-  confetti({ particleCount: 130, spread: 95, startVelocity: 50, origin: { y: 0.7 }, colors: PALETTE, scalar: 0.9 });
+  confetti({ particleCount: 140, spread: 95, startVelocity: 52, origin: { y: 0.7 }, colors: PALETTE, scalar: 0.95 });
   const end = Date.now() + 2600;
   (function sides() {
-    confetti({ particleCount: 4, angle: 60, spread: 55, origin: { x: 0, y: 0.7 }, colors: PALETTE, scalar: 0.8 });
-    confetti({ particleCount: 4, angle: 120, spread: 55, origin: { x: 1, y: 0.7 }, colors: PALETTE, scalar: 0.8 });
+    confetti({ particleCount: 4, angle: 60, spread: 55, origin: { x: 0, y: 0.7 }, colors: PALETTE, scalar: 0.85 });
+    confetti({ particleCount: 4, angle: 120, spread: 55, origin: { x: 1, y: 0.7 }, colors: PALETTE, scalar: 0.85 });
     if (Date.now() < end) requestAnimationFrame(sides);
   })();
 }
 
-/* ---------- Leg 1: Swim (Postcards) ---------- */
+/* ---------- Leg 1: Swim (Athlete Dossiers) ---------- */
 const cards = $$("#cards .card");
 const cardStatus = $("#card-status");
 const ladsDone = $("#lads-done");
@@ -201,12 +192,12 @@ cards.forEach((card) => {
     const memory = card.parentElement.querySelector(".card-memory");
     card.setAttribute("aria-label", `${name}: ${msg}`);
     cardStatus.textContent = msg;
-    later(() => { if (memory) memory.hidden = false; }, 600);
+    later(() => { if (memory) memory.hidden = false; }, 500);
     buzz(12);
     turned += 1;
     if (turned === cards.length) {
       unlockRoundNav("quiz-round");
-      later(() => { ladsDone.hidden = false; }, 1100);
+      later(() => { ladsDone.hidden = false; }, 950);
     } else {
       const next = cards.find((c) => !c.classList.contains("is-turned"));
       next && next.focus({ preventScroll: true });
@@ -214,7 +205,7 @@ cards.forEach((card) => {
   });
 });
 
-/* ---------- Leg 2: Bike (The Quiz) ---------- */
+/* ---------- Leg 2: Bike (Anti-Drafting Tribunal) ---------- */
 const PEN = '<svg class="pen" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M10,14 C20,4 62,2 84,6 C98,9 99,22 90,30 C78,38 40,39 20,35 C6,32 2,22 12,13"/></svg>';
 const TICK = '<svg class="q-mark" viewBox="0 0 30 30" aria-hidden="true"><path pathLength="1" d="M4,16 L12,24 L27,4"/></svg>';
 const CROSS = '<svg class="q-mark" viewBox="0 0 30 30" aria-hidden="true"><path pathLength="1" d="M6,6 L24,24 M24,6 L6,24"/></svg>';
@@ -234,7 +225,7 @@ questions.forEach((q, i) => {
       const right = btn.hasAttribute("data-correct");
       if (right) score += 1;
       q.insertAdjacentHTML("beforeend", right ? TICK : CROSS);
-      $(".q-reply", q).textContent = btn.dataset.reply || (right ? "Correct." : "Penalty!");
+      $(".q-reply", q).textContent = btn.dataset.reply || (right ? "Green Card." : "Penalty!");
       scoreEl.textContent = `${score} / ${i + 1}`;
       buzz(10);
       q.classList.remove("is-current");
@@ -248,22 +239,22 @@ questions.forEach((q, i) => {
         } else {
           unlockRoundNav("board");
           if (score === questions.length) {
-            verdictText.textContent = `${score} / ${questions.length} Splits. Kona World Championship standard — first pint in Xàtiva is on me.`;
+            verdictText.textContent = `${score} OUT OF ${questions.length} SPLITS. KONA WORLD CHAMPIONSHIP STANDARD. FIRST PINT IN XÀTIVA IS ON ME.`;
           } else if (score >= 3) {
-            verdictText.textContent = `${score} / ${questions.length} Splits. Solid Zone 2 effort. Bike racked in T2.`;
+            verdictText.textContent = `${score} OUT OF ${questions.length} SPLITS. RESPECTABLE ZONE 2 GRIND. RACK YOUR BIKE IN T2.`;
           } else {
-            verdictText.textContent = `${score} / ${questions.length} Splits. Shocking wattage, you’re in the penalty tent — but you still qualify.`;
+            verdictText.textContent = `${score} OUT OF ${questions.length} SPLITS. SHOCKING WATTAGE, YOU SPENT HALF THE RACE IN THE PENALTY TENT, BUT YOU STILL QUALIFY.`;
           }
           verdict.hidden = false;
           scrollTo(verdict);
           $(".next-link", verdict).focus({ preventScroll: true });
         }
-      }, reduceMotion ? 0 : 1100);
+      }, reduceMotion ? 0 : 1050);
     });
   });
 });
 
-/* ---------- Leg 3: Run (Wipe the Board) ---------- */
+/* ---------- Leg 3: Marathon (Course Telemetry Board) ---------- */
 const wipes = $$(".wipe");
 const boardNext = $("#board-next");
 let wiped = 0;
@@ -276,23 +267,23 @@ wipes.forEach((btn) => {
     text.setAttribute("tabindex", "-1");
     text.focus({ preventScroll: true });
     buzz(8);
-    setTimeout(() => btn.remove(), reduceMotion ? 0 : 750);
+    setTimeout(() => btn.remove(), reduceMotion ? 0 : 650);
     wiped += 1;
     if (wiped === wipes.length) {
       unlockRoundNav("last-call");
-      later(() => { boardNext.hidden = false; }, 600);
+      later(() => { boardNext.hidden = false; }, 500);
     }
   });
 });
 
-/* ---------- Leg 4: Bulletproof Podium Cava Pop ---------- */
+/* ---------- Leg 4: 140.6 Finisher Medal Ceremony ---------- */
 const pop = $("#pop");
 const stage = $("#bottle-stage");
 const ring = $(".pop-ring circle");
 const popHint = $("#pop-hint");
 const bottleWrap = $("#bottle-wrap");
 const letter = $("#letter");
-const HOLD_MS = 650; // Snappier hold time (0.65s)
+const HOLD_MS = 600;
 let progress = 0;
 let holding = false;
 let popped = false;
@@ -304,36 +295,34 @@ const setProgress = (p) => {
   if (ring) ring.style.strokeDashoffset = String(1 - progress);
 };
 
-function popSound() {
+// Triumphal Finisher Chord / Bell Chime
+function medalSound() {
   try {
     const AC = window.AudioContext || window.webkitAudioContext;
     if (!AC) return;
     const ac = new AC();
     const t = ac.currentTime;
-    const len = Math.floor(ac.sampleRate * 0.25);
-    const buf = ac.createBuffer(1, len, ac.sampleRate);
-    const d = buf.getChannelData(0);
-    for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 6);
-    const noise = ac.createBufferSource();
-    noise.buffer = buf;
-    const band = ac.createBiquadFilter();
-    band.type = "bandpass"; band.frequency.value = 900; band.Q.value = 0.8;
-    const g = ac.createGain(); g.gain.value = 0.5;
-    noise.connect(band); band.connect(g); g.connect(ac.destination);
-    const o = ac.createOscillator(); const og = ac.createGain();
-    o.frequency.setValueAtTime(420, t); o.frequency.exponentialRampToValueAtTime(90, t + 0.12);
-    og.gain.setValueAtTime(0.25, t); og.gain.exponentialRampToValueAtTime(0.0001, t + 0.15);
-    o.connect(og); og.connect(ac.destination);
-    noise.start(t); o.start(t); o.stop(t + 0.2);
-    setTimeout(() => ac.close(), 800);
-  } catch { /* no audio, no problem */ }
+    [523.25, 659.25, 783.99, 1046.5].forEach((freq, idx) => {
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(freq, t + idx * 0.06);
+      gain.gain.setValueAtTime(0.18, t + idx * 0.06);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + idx * 0.06 + 0.65);
+      osc.connect(gain);
+      gain.connect(ac.destination);
+      osc.start(t + idx * 0.06);
+      osc.stop(t + idx * 0.06 + 0.7);
+    });
+    setTimeout(() => ac.close(), 1200);
+  } catch { /* audio optional */ }
 }
 
-function spray() {
+function goldBurst() {
   if (typeof window.confetti !== "function") return;
   const r = stage.getBoundingClientRect();
-  const origin = { x: (r.left + r.width / 2) / window.innerWidth, y: Math.max(0.05, (r.top + r.height * 0.22) / window.innerHeight) };
-  confetti({ particleCount: 95, angle: 80, spread: 40, startVelocity: 48, gravity: 1.1, ticks: 140, origin, colors: ["#fbf1dc", "#fff8e6", "#f6e7b8", "#e9b949"], scalar: 0.85, disableForReducedMotion: true });
+  const origin = { x: (r.left + r.width / 2) / window.innerWidth, y: Math.max(0.1, (r.top + r.height * 0.6) / window.innerHeight) };
+  confetti({ particleCount: 110, spread: 80, startVelocity: 45, origin, colors: ["#ffb800", "#e31837", "#ffffff", "#d49a2a"], scalar: 0.9, disableForReducedMotion: true });
 }
 
 function holdStep(t) {
@@ -341,7 +330,7 @@ function holdStep(t) {
   const p = Math.min((t - holdStart) / HOLD_MS, 1);
   setProgress(p);
   if (p >= 1) {
-    popCork();
+    awardMedal();
     return;
   }
   rafId = requestAnimationFrame(holdStep);
@@ -354,7 +343,7 @@ function startHold(e) {
   holding = true;
   stage.classList.add("is-pressing");
   holdStart = performance.now() - progress * HOLD_MS;
-  buzz(10);
+  buzz(12);
   if (rafId) cancelAnimationFrame(rafId);
   rafId = requestAnimationFrame(holdStep);
 }
@@ -365,14 +354,14 @@ function endHold() {
   stage.classList.remove("is-pressing");
   if (rafId) cancelAnimationFrame(rafId);
 
-  // Also add +0.38 boost per tap so tapping 3 times pops the bottle even if they don't hold!
-  const boosted = Math.min(1, progress + 0.35);
+  // Instant +0.4 boost on every tap so 3 quick taps or 1 short hold awards the medal reliably
+  const boosted = Math.min(1, progress + 0.4);
   setProgress(boosted);
   if (boosted >= 1) {
-    popCork();
+    awardMedal();
     return;
   }
-  popHint.textContent = "Keep shaking — tap or hold again to pop it!";
+  popHint.textContent = "ALMOST AT THE LINE! TAP OR HOLD AGAIN TO CLAIM YOUR MEDAL";
 }
 
 pop.addEventListener("pointerdown", startHold);
@@ -381,11 +370,11 @@ pop.addEventListener("contextmenu", (e) => e.preventDefault());
 pop.addEventListener("keydown", (e) => {
   if (e.key === "Enter" || e.key === " ") {
     e.preventDefault();
-    popCork();
+    awardMedal();
   }
 });
 
-function popCork() {
+function awardMedal() {
   if (popped) return;
   popped = true;
   holding = false;
@@ -394,10 +383,10 @@ function popCork() {
   stage.classList.remove("is-pressing");
   stage.classList.add("is-popped");
   pop.setAttribute("aria-disabled", "true");
-  popHint.textContent = "Podium Finish! Salud.";
-  popSound();
-  spray();
-  buzz([20, 40, 60]);
+  popHint.textContent = "140.6 FINISHER MEDAL AWARDED!";
+  medalSound();
+  goldBurst();
+  buzz([30, 40, 80]);
 
   const showLetter = () => {
     bottleWrap.hidden = true;
@@ -407,11 +396,11 @@ function popCork() {
     scrollTo(letter, "start");
   };
   if (reduceMotion) { showLetter(); return; }
-  setTimeout(() => bottleWrap.classList.add("is-gone"), 1300);
-  setTimeout(showLetter, 1850);
+  setTimeout(() => bottleWrap.classList.add("is-gone"), 1200);
+  setTimeout(showLetter, 1750);
 }
 
-/* ---------- Sign, Lad Picker, and Ironman Souvenir Generator ---------- */
+/* ---------- Sign, Lad Picker, and 140.6 Souvenir Bib Generator ---------- */
 const accept = $("#accept");
 const canvas = $("#sign-canvas");
 const ctx = canvas.getContext("2d");
@@ -428,7 +417,7 @@ const shareSouvenirBtn = $("#share-souvenir");
 const whatsappLink = $("#whatsapp-link");
 const ladPills = $$(".lad-pill");
 
-const INK = "#233552";
+const INK = "#12141a";
 const HAND = `Yellowtail, "Brush Script MT", cursive`;
 let handInk = false;
 let drawing = false;
@@ -515,7 +504,7 @@ canvas.addEventListener("pointermove", (e) => {
   const p = pos(e);
   const dist = Math.hypot(p.x - last.x, p.y - last.y);
   const speed = dist / Math.max(p.t - last.t, 1);
-  ctx.lineWidth = Math.max(1.2, Math.min(3.2, 3.4 - speed * 1.4));
+  ctx.lineWidth = Math.max(1.4, Math.min(3.4, 3.6 - speed * 1.4));
   ctx.beginPath();
   ctx.moveTo(last.x, last.y);
   ctx.lineTo(p.x, p.y);
@@ -547,12 +536,12 @@ nameInput.addEventListener("input", () => {
 });
 
 noChoice.addEventListener("click", () => {
-  noChoiceReply.textContent = "Zero chance of a DNF. Sign the waiver — and it’s your round anyway.";
+  noChoiceReply.textContent = "Zero chance of a DNF. Sign the waiver, and it is your round at the bar anyway.";
   noChoice.hidden = true;
   scrollTo($(".sign-pad"), "center");
 });
 
-/* ---------- Render Souvenir Race Bib onto #souvenir-canvas ---------- */
+/* ---------- Render Official 140.6 Souvenir Race Bib ---------- */
 function renderSouvenirBib() {
   const sctx = souvenirCanvas.getContext("2d");
   const W = souvenirCanvas.width;
@@ -561,92 +550,93 @@ function renderSouvenirBib() {
   const bibNo = selectedBib || "001";
   const finalScore = `${score} / ${questions.length}`;
 
-  // Background cream card
-  sctx.fillStyle = "#fbf1dc";
+  // Off-white official Tyvek race bib base
+  sctx.fillStyle = "#f6f4ee";
   sctx.fillRect(0, 0, W, H);
 
-  // Top & Bottom Ironman Red + Retro Stripes
-  const stripeColors = ["#c8352a", "#e8622c", "#e9b949"];
-  stripeColors.forEach((c, idx) => {
-    sctx.fillStyle = c;
-    sctx.fillRect(0, idx * 10, W, 10);
-    sctx.fillRect(0, H - (3 - idx) * 10, W, 10);
-  });
+  // Top & Bottom WTC Red & Black Championship Bars
+  sctx.fillStyle = "#111318";
+  sctx.fillRect(0, 0, W, 68);
+  sctx.fillStyle = "#e31837";
+  sctx.fillRect(0, 68, W, 14);
 
-  // Corner punch holes (race bib eyelets)
-  sctx.fillStyle = "#ecd4a8";
-  sctx.strokeStyle = "#5b3424";
-  sctx.lineWidth = 3;
-  [[38, 56], [W - 38, 56], [38, H - 56], [W - 38, H - 56]].forEach(([cx, cy]) => {
+  sctx.fillStyle = "#e31837";
+  sctx.fillRect(0, H - 40, W, 12);
+  sctx.fillStyle = "#111318";
+  sctx.fillRect(0, H - 28, W, 28);
+
+  // Corner bib eyelets
+  sctx.fillStyle = "#0b0c10";
+  [[34, 34], [W - 34, 34], [34, H - 54], [W - 34, H - 54]].forEach(([cx, cy]) => {
     sctx.beginPath();
-    sctx.arc(cx, cy, 12, 0, Math.PI * 2);
+    sctx.arc(cx, cy, 10, 0, Math.PI * 2);
     sctx.fill();
-    sctx.stroke();
   });
 
-  // Header Banner
-  sctx.fillStyle = "#c8352a";
-  sctx.font = "800 22px Jost, sans-serif";
+  // Top Championship Header Text
+  sctx.fillStyle = "#ffffff";
+  sctx.font = "700 28px 'Barlow Condensed', sans-serif";
   sctx.textAlign = "center";
-  sctx.fillText("IRONMAN® 70.3 XÀTIVA • OFFICIAL GROOMSMAN CHAMPIONSHIP", W / 2, 68);
+  sctx.fillText("IRONMAN 140.6 XÀTIVA • GROOMSMAN WORLD CHAMPIONSHIP", W / 2, 44);
 
-  sctx.fillStyle = "#134a50";
-  sctx.font = "400 30px Yellowtail, cursive";
-  sctx.fillText("Matt & Dasha • Hotel Montsant • 21 August 2027", W / 2, 108);
+  // Sub-banner
+  sctx.fillStyle = "#e31837";
+  sctx.font = "700 22px 'Barlow Condensed', sans-serif";
+  sctx.fillText("MATT & DASHA • HOTEL MONTSANT • 21 AUGUST 2027", W / 2, 114);
 
-  // Giant Bib Number & Athlete Name
-  sctx.fillStyle = "#3a2418";
-  sctx.font = "400 100px Shrikhand, Georgia, serif";
-  sctx.fillText(`#${bibNo} ${ladName.toUpperCase()}`, W / 2, 212);
+  // Giant Race Bib Number & Name
+  sctx.fillStyle = "#111318";
+  sctx.font = "700 120px 'Teko', Impact, sans-serif";
+  sctx.fillText(`#${bibNo}  ${ladName.toUpperCase()}`, W / 2, 224);
 
-  // Telemetry Splits Bar
-  sctx.fillStyle = "#1f6b70";
-  sctx.fillRect(60, 240, W - 120, 48);
-  sctx.fillStyle = "#fbf1dc";
-  sctx.font = "700 17px Jost, sans-serif";
-  sctx.fillText(`SWIM: 3.8KM THATCHERS   |   REFEREE QUIZ: ${finalScore}   |   DUTY: STAG & SPEECHES`, W / 2, 270);
+  // Telemetry Split Bar
+  sctx.fillStyle = "#111318";
+  sctx.fillRect(50, 248, W - 100, 48);
+  sctx.fillStyle = "#ffb800";
+  sctx.font = "700 17px 'JetBrains Mono', monospace";
+  sctx.fillText(`DISTANCE: 140.6 MILES   |   TRIBUNAL SPLITS: ${finalScore}   |   STATUS: FINISHER`, W / 2, 278);
 
-  // Copy user's drawn signature from #sign-canvas
-  sctx.strokeStyle = "rgba(58, 36, 24, 0.45)";
+  // Signature box & line
+  sctx.strokeStyle = "#111318";
   sctx.lineWidth = 2;
   sctx.beginPath();
-  sctx.moveTo(110, 455);
-  sctx.lineTo(550, 455);
+  sctx.moveTo(90, 465);
+  sctx.lineTo(540, 465);
   sctx.stroke();
 
-  sctx.fillStyle = "#6b4a36";
-  sctx.font = "600 14px Jost, sans-serif";
+  sctx.fillStyle = "#333333";
+  sctx.font = "700 14px 'JetBrains Mono', monospace";
   sctx.textAlign = "left";
-  sctx.fillText("ATHLETE WAIVER SIGNATURE (BINDING + 1 DANCE WITH NAN):", 110, 480);
+  sctx.fillText("ATHLETE WAIVER SIGNATURE (BINDING + 1 DANCE WITH NAN):", 90, 490);
 
-  // Draw signature canvas scaled into the bib
-  sctx.drawImage(canvas, 110, 320, 440, 130);
+  // Composite drawn signature onto the bib
+  sctx.drawImage(canvas, 90, 325, 450, 135);
 
-  // Finisher Stamp on the right
+  // Official 140.6 Finisher Stamp on the right
   sctx.save();
-  sctx.translate(720, 395);
-  sctx.rotate(-0.14);
-  sctx.strokeStyle = "#c8352a";
-  sctx.lineWidth = 4.5;
+  sctx.translate(725, 405);
+  sctx.rotate(-0.12);
+  sctx.strokeStyle = "#e31837";
+  sctx.lineWidth = 5;
   sctx.beginPath();
-  sctx.arc(0, 0, 68, 0, Math.PI * 2);
+  sctx.arc(0, 0, 72, 0, Math.PI * 2);
   sctx.stroke();
   sctx.beginPath();
-  sctx.arc(0, 0, 57, 0, Math.PI * 2);
+  sctx.arc(0, 0, 60, 0, Math.PI * 2);
   sctx.stroke();
-  sctx.fillStyle = "#c8352a";
+  sctx.fillStyle = "#e31837";
   sctx.textAlign = "center";
-  sctx.font = "800 15px Jost, sans-serif";
-  sctx.fillText("IRONMAN XÀTIVA", 0, -18);
-  sctx.font = "800 22px Jost, sans-serif";
-  sctx.fillText("FINISHER", 0, 7);
-  sctx.font = "700 13px Jost, sans-serif";
-  sctx.fillText("SUB-4AM CUTOFF", 0, 27);
+  sctx.font = "800 16px 'Barlow Condensed', sans-serif";
+  sctx.fillText("IRONMAN 140.6", 0, -20);
+  sctx.font = "800 26px 'Barlow Condensed', sans-serif";
+  sctx.fillText("FINISHER", 0, 8);
+  sctx.font = "700 14px 'JetBrains Mono', monospace";
+  sctx.fillText("XÀTIVA 2027", 0, 30);
   sctx.restore();
 
-  // Set WhatsApp status deep link
+  // WhatsApp pre-filled message (zero hyphens)
   const waText = encodeURIComponent(
-    `🏊‍♂️🚴‍♂️🏃‍♂️ Bib #${bibNo} (${ladName}) officially qualified for IRONMAN Xàtiva 2027! Referee Quiz: ${finalScore}. First job: the stag 🍻🇪🇸`
+    `Bib #${bibNo} (${ladName}) officially qualified for IRONMAN 140.6 Xàtiva 2027! Tribunal score: ${finalScore}. First job: the stag 🍻🇪🇸`
   );
   whatsappLink.href = `https://wa.me/?text=${waText}`;
 }
@@ -655,23 +645,23 @@ shareSouvenirBtn.addEventListener("click", async () => {
   souvenirCanvas.toBlob(async (blob) => {
     if (!blob) return;
     const ladSlug = (selectedLad || "groomsman").toLowerCase();
-    const file = new File([blob], `ironman-xativa-2027-bib-${ladSlug}.png`, { type: "image/png" });
+    const file = new File([blob], `ironman-1406-xativa-bib-${ladSlug}.png`, { type: "image/png" });
 
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       try {
         await navigator.share({
           files: [file],
-          title: "IRONMAN Xàtiva 2027 — Groomsman Race Bib",
+          title: "IRONMAN 140.6 Xàtiva | Official Finisher Bib",
           text: "Signed the waiver and qualified for Xàtiva 2027 🍻"
         });
         return;
-      } catch { /* user cancelled or share failed, fall back to download */ }
+      } catch { /* fallback to download */ }
     }
 
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `ironman-xativa-2027-bib-${ladSlug}.png`;
+    a.download = `ironman-1406-xativa-bib-${ladSlug}.png`;
     document.body.appendChild(a);
     a.click();
     a.remove();
