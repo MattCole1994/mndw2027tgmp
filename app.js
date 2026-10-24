@@ -1,12 +1,10 @@
 /* =========================================================
    Groomsmen invite: Mitch, Brad and Liam
    Gate, parallax beach bar, pints per round, postcards,
-   the quiz, the board, pop the cava, sign the letter.
+   the quiz, the board, pop the cava, sign & souvenir bib.
    ========================================================= */
 
-// SHA-256 of the passcode. Default passcode is "ashtongate". Change it before sharing:
-//   terminal:  echo -n 'yourpasscode' | shasum -a 256
-//   browser:   getHash('yourpasscode')   (in the dev-tools console)
+// SHA-256 of the passcode. Default passcode is "ashtongate".
 const TARGET_HASH = "be29d4bafe90de2b44d64e5c71562656fbcb350822b14a29ad01577728e77b0f";
 const SESSION_KEY = "lads-only-unlocked";
 
@@ -16,6 +14,23 @@ const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 const buzz = (ms) => { try { navigator.vibrate && navigator.vibrate(ms); } catch { /* not supported */ } };
 const later = (fn, ms) => setTimeout(fn, reduceMotion ? 0 : ms);
 const scrollTo = (el, block = "nearest") => el.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block });
+
+/* ---------- Optional URL personalisation (?lad=mitch) ---------- */
+const LADS_MAP = {
+  mitch: { name: "Mitch", bib: "01" },
+  brad: { name: "Brad", bib: "02" },
+  liam: { name: "Liam", bib: "03" }
+};
+let selectedLad = null;
+let selectedBib = "01";
+
+const urlLad = new URLSearchParams(window.location.search).get("lad")?.toLowerCase();
+if (urlLad && LADS_MAP[urlLad]) {
+  selectedLad = LADS_MAP[urlLad].name;
+  selectedBib = LADS_MAP[urlLad].bib;
+  const heroTurn = $("#hero-turn");
+  if (heroTurn) heroTurn.textContent = `Your turn, ${selectedLad}.`;
+}
 
 /* ---------- Hashing ---------- */
 async function sha256(text) {
@@ -68,7 +83,7 @@ form.addEventListener("submit", async (e) => {
     rememberUnlock();
     unlock();
   } else {
-    rejectAttempt("Not that. Think every other Saturday.");
+    rejectAttempt("Not that. Think every other Saturday in BS3.");
   }
 });
 input.addEventListener("input", () => { input.classList.remove("is-invalid"); errorEl.textContent = ""; });
@@ -78,20 +93,26 @@ if (isUnlocked()) unlock({ instant: true }); else input.focus();
 /* ---------- Top bar: a pint poured for each round reached ---------- */
 const topbar = $("#topbar");
 const hero = $(".hero");
+const roundLinks = $$("[data-round]");
+
+function unlockRoundNav(roundId) {
+  const link = $(`[data-round="${roundId}"]`);
+  if (link) link.classList.remove("is-locked-round");
+}
+
 if ("IntersectionObserver" in window) {
   new IntersectionObserver(([entry]) => {
     topbar.classList.toggle("is-shown", !entry.isIntersecting);
   }, { threshold: 0.15 }).observe(hero);
 
-  const links = $$("[data-round]");
-  const ids = links.map((a) => a.dataset.round);
+  const ids = roundLinks.map((a) => a.dataset.round);
   let reached = -1;
   const roundObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
       const current = ids.indexOf(entry.target.id);
       reached = Math.max(reached, current);
-      links.forEach((a, i) => {
+      roundLinks.forEach((a, i) => {
         a.classList.toggle("is-poured", i <= reached);
         a.classList.toggle("is-current", i === current);
         if (i === current) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current");
@@ -184,6 +205,7 @@ cards.forEach((card) => {
     buzz(12);
     turned += 1;
     if (turned === cards.length) {
+      unlockRoundNav("quiz-round");
       later(() => { ladsDone.hidden = false; }, 1100);
     } else {
       const next = cards.find((c) => !c.classList.contains("is-turned"));
@@ -224,9 +246,14 @@ questions.forEach((q, i) => {
           scrollTo(next);
           $(".ans", next).focus({ preventScroll: true });
         } else {
-          verdictText.textContent = score === questions.length
-            ? `${score} out of ${questions.length}. Fit for duty.`
-            : `${score} out of ${questions.length}. Fit for duty anyway. We’ll work on the rest.`;
+          unlockRoundNav("board");
+          if (score === questions.length) {
+            verdictText.textContent = `${score} out of ${questions.length}. Sub-9 hour pace. First pint in Xàtiva is on me.`;
+          } else if (score >= 3) {
+            verdictText.textContent = `${score} out of ${questions.length}. Solid Zone 2 effort. Fit for duty.`;
+          } else {
+            verdictText.textContent = `${score} out of ${questions.length}. Shocking splits, you’re on baggage duty — but you’re still in.`;
+          }
           verdict.hidden = false;
           scrollTo(verdict);
           $(".next-link", verdict).focus({ preventScroll: true });
@@ -251,7 +278,10 @@ wipes.forEach((btn) => {
     buzz(8);
     setTimeout(() => btn.remove(), reduceMotion ? 0 : 750);
     wiped += 1;
-    if (wiped === wipes.length) later(() => { boardNext.hidden = false; }, 600);
+    if (wiped === wipes.length) {
+      unlockRoundNav("last-call");
+      later(() => { boardNext.hidden = false; }, 600);
+    }
   });
 });
 
@@ -270,7 +300,6 @@ let holdStart = 0;
 
 const setProgress = (p) => { progress = p; ring.style.strokeDashoffset = String(1 - p); };
 
-// A cork pop, synthesised (quiet, and only after a tap)
 function popSound() {
   try {
     const AC = window.AudioContext || window.webkitAudioContext;
@@ -365,7 +394,7 @@ function popCork() {
   setTimeout(showLetter, 2100);
 }
 
-/* ---------- Sign and postmark ---------- */
+/* ---------- Sign, Lad Picker, and Souvenir Generator ---------- */
 const accept = $("#accept");
 const canvas = $("#sign-canvas");
 const ctx = canvas.getContext("2d");
@@ -376,11 +405,36 @@ const noChoice = $("#no-choice");
 const noChoiceReply = $("#no-choice-reply");
 const markSlot = $("#mark-slot");
 const confirmation = $("#confirmation");
+const confirmationIronman = $("#confirmation-ironman");
+const souvenirCanvas = $("#souvenir-canvas");
+const shareSouvenirBtn = $("#share-souvenir");
+const whatsappLink = $("#whatsapp-link");
+const ladPills = $$(".lad-pill");
+
 const INK = "#233552";
 const HAND = `Yellowtail, "Brush Script MT", cursive`;
 let handInk = false;
 let drawing = false;
 let last = null;
+
+// Pre-select pill if URL had ?lad=
+ladPills.forEach((pill) => {
+  if (selectedLad && pill.dataset.lad === selectedLad) {
+    pill.classList.add("is-active");
+    nameInput.value = selectedLad;
+  }
+  pill.addEventListener("click", () => {
+    ladPills.forEach((p) => p.classList.remove("is-active"));
+    pill.classList.add("is-active");
+    selectedLad = pill.dataset.lad;
+    selectedBib = pill.dataset.bib;
+    if (!handInk) {
+      nameInput.value = selectedLad;
+      writeTypedName();
+      updateSignButton();
+    }
+  });
+});
 
 function sizeCanvas() {
   const r = canvas.getBoundingClientRect();
@@ -400,6 +454,7 @@ function sizeCanvas() {
     img.src = keep;
   } else if (nameInput.value.trim()) {
     writeTypedName();
+    updateSignButton();
   }
 }
 window.addEventListener("resize", () => { if (!letter.hidden) sizeCanvas(); });
@@ -435,7 +490,7 @@ canvas.addEventListener("pointerdown", (e) => {
   if (accept.classList.contains("is-signed")) return;
   e.preventDefault();
   try { canvas.setPointerCapture(e.pointerId); } catch { /* fine */ }
-  if (!handInk && nameInput.value.trim()) { nameInput.value = ""; clearPad(); }
+  if (!handInk && nameInput.value.trim()) { clearPad(); }
   drawing = true;
   last = pos(e);
 });
@@ -465,14 +520,148 @@ clearBtn.addEventListener("click", () => {
 
 nameInput.addEventListener("input", () => {
   if (handInk) handInk = false;
+  const typed = nameInput.value.trim().toLowerCase();
+  if (LADS_MAP[typed]) {
+    selectedLad = LADS_MAP[typed].name;
+    selectedBib = LADS_MAP[typed].bib;
+    ladPills.forEach((p) => p.classList.toggle("is-active", p.dataset.lad === selectedLad));
+  }
   writeTypedName();
   updateSignButton();
 });
 
 noChoice.addEventListener("click", () => {
-  noChoiceReply.textContent = "No. But it’s your round anyway.";
+  noChoiceReply.textContent = "No. Mandatory race entry. And it’s your round anyway.";
   noChoice.hidden = true;
   scrollTo($(".sign-pad"), "center");
+});
+
+/* ---------- Render Souvenir Race Bib onto #souvenir-canvas ---------- */
+function renderSouvenirBib() {
+  const sctx = souvenirCanvas.getContext("2d");
+  const W = souvenirCanvas.width;
+  const H = souvenirCanvas.height;
+  const ladName = selectedLad || nameInput.value.trim() || "Official Lad";
+  const bibNo = selectedBib || "01";
+  const finalScore = `${score} / ${questions.length}`;
+
+  // Background cream card
+  sctx.fillStyle = "#fbf1dc";
+  sctx.fillRect(0, 0, W, H);
+
+  // Retro 70s triple top & bottom stripes
+  const stripeColors = ["#e9b949", "#e8622c", "#5b3424"];
+  stripeColors.forEach((c, idx) => {
+    sctx.fillStyle = c;
+    sctx.fillRect(0, idx * 10, W, 10);
+    sctx.fillRect(0, H - (3 - idx) * 10, W, 10);
+  });
+
+  // Corner punch holes (like a real race bib)
+  sctx.fillStyle = "#ecd4a8";
+  sctx.strokeStyle = "#5b3424";
+  sctx.lineWidth = 3;
+  [[38, 56], [W - 38, 56], [38, H - 56], [W - 38, H - 56]].forEach(([cx, cy]) => {
+    sctx.beginPath();
+    sctx.arc(cx, cy, 12, 0, Math.PI * 2);
+    sctx.fill();
+    sctx.stroke();
+  });
+
+  // Top header banner
+  sctx.fillStyle = "#134a50";
+  sctx.font = "700 20px Jost, sans-serif";
+  sctx.textAlign = "center";
+  sctx.fillText("IRONMAN® 70.3 XÀTIVA • OFFICIAL GROOMSMAN RACE BIB", W / 2, 72);
+
+  // Giant Bib Number & Name
+  sctx.fillStyle = "#e8622c";
+  sctx.font = "400 32px Yellowtail, cursive";
+  sctx.fillText("Matt & Dasha • 21 August 2027", W / 2, 114);
+
+  sctx.fillStyle = "#3a2418";
+  sctx.font = "400 105px Shrikhand, Georgia, serif";
+  sctx.fillText(`#${bibNo} ${ladName.toUpperCase()}`, W / 2, 220);
+
+  // Stats bar
+  sctx.fillStyle = "#1f6b70";
+  sctx.fillRect(70, 250, W - 140, 44);
+  sctx.fillStyle = "#fbf1dc";
+  sctx.font = "600 18px Jost, sans-serif";
+  sctx.fillText(`VENUE: HOTEL MONTSANT   |   QUIZ SPLIT: ${finalScore}   |   DUTY: STAG & SPEECHES`, W / 2, 278);
+
+  // Copy user's drawn signature from #sign-canvas
+  sctx.strokeStyle = "rgba(58, 36, 24, 0.4)";
+  sctx.lineWidth = 2;
+  sctx.beginPath();
+  sctx.moveTo(140, 445);
+  sctx.lineTo(560, 445);
+  sctx.stroke();
+
+  sctx.fillStyle = "#6b4a36";
+  sctx.font = "500 15px Jost, sans-serif";
+  sctx.textAlign = "left";
+  sctx.fillText("ATHLETE WAIVER SIGNATURE (BINDING + 1 DANCE WITH NAN):", 140, 470);
+
+  // Draw signature canvas scaled into the bib
+  sctx.drawImage(canvas, 140, 315, 420, 125);
+
+  // Stamp seal on the right
+  sctx.save();
+  sctx.translate(715, 390);
+  sctx.rotate(-0.14);
+  sctx.strokeStyle = "#c8352a";
+  sctx.lineWidth = 4;
+  sctx.beginPath();
+  sctx.arc(0, 0, 64, 0, Math.PI * 2);
+  sctx.stroke();
+  sctx.beginPath();
+  sctx.arc(0, 0, 54, 0, Math.PI * 2);
+  sctx.stroke();
+  sctx.fillStyle = "#c8352a";
+  sctx.textAlign = "center";
+  sctx.font = "700 16px Jost, sans-serif";
+  sctx.fillText("XÀTIVA 2027", 0, -16);
+  sctx.font = "700 22px Jost, sans-serif";
+  sctx.fillText("QUALIFIED", 0, 8);
+  sctx.font = "600 13px Jost, sans-serif";
+  sctx.fillText("NO DNF ALLOWED", 0, 28);
+  sctx.restore();
+
+  // Set WhatsApp status deep link
+  const waText = encodeURIComponent(
+    `Bib #${bibNo} (${ladName}) signed and locked in for Xàtiva 2027 🍻🇪🇸 Quiz score: ${finalScore}. First job: the stag.`
+  );
+  whatsappLink.href = `https://wa.me/?text=${waText}`;
+}
+
+shareSouvenirBtn.addEventListener("click", async () => {
+  souvenirCanvas.toBlob(async (blob) => {
+    if (!blob) return;
+    const ladSlug = (selectedLad || "groomsman").toLowerCase();
+    const file = new File([blob], `xativa-2027-bib-${ladSlug}.png`, { type: "image/png" });
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({
+          files: [file],
+          title: "Official Groomsman Race Bib — Xàtiva 2027",
+          text: "Signed and qualified for Xàtiva 2027 🍻"
+        });
+        return;
+      } catch { /* user cancelled or share failed, fall back to download */ }
+    }
+
+    // Fallback: direct image download
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `xativa-2027-bib-${ladSlug}.png`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+  }, "image/png");
 });
 
 signAnswer.addEventListener("click", () => {
@@ -481,9 +670,18 @@ signAnswer.addEventListener("click", () => {
   nameInput.disabled = true;
   signAnswer.disabled = true;
   markSlot.innerHTML = '<svg viewBox="0 0 170 90"><use href="#postmark"/></svg>';
+
+  const displayLad = selectedLad || nameInput.value.trim();
+  if (displayLad) {
+    confirmationIronman.textContent = `${displayLad.toUpperCase()}, YOU ARE A GROOMSMAN!`;
+  }
+
+  renderSouvenirBib();
+
   later(() => {
     buzz([40, 30, 80]);
     confirmation.hidden = false;
     celebrate();
+    scrollTo(confirmation, "center");
   }, 450);
 });
