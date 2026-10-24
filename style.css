@@ -66,6 +66,10 @@ button { font: inherit; }
   border-radius: 999px;
   border: 2px solid transparent;
   cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, opacity 0.3s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
 .btn:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: none; }
@@ -91,7 +95,7 @@ button { font: inherit; }
 .next-link:hover { background: #d4531f; }
 
 /* =========================================================
-   Gate
+   Gate (with Ironman M-Dot self-parody)
    ========================================================= */
 .gate {
   position: fixed; inset: 0; z-index: 60;
@@ -108,18 +112,52 @@ button { font: inherit; }
 .gate.is-leaving { opacity: 0; visibility: hidden; }
 .gate-card {
   margin: auto;
-  width: 100%; max-width: 22rem; text-align: center;
-  padding: 2rem 1.75rem 1.4rem;
+  width: 100%; max-width: 24rem; text-align: center;
+  padding: 1.8rem 1.75rem 1.4rem;
   background: var(--cream) var(--grain);
   border-radius: 1.25rem;
   border: 3px solid var(--brown);
   box-shadow: 8px 8px 0 var(--orange), 8px 8px 0 3px var(--brown);
 }
 .gate-card.is-shaking { animation: shake 0.45s cubic-bezier(.36,.07,.19,.97) both; }
-.gate-robin { width: 5rem; height: 4.5rem; display: block; margin: 0 auto 0.5rem; }
-.gate-title { font: 400 3rem/1 var(--display); margin: 0; color: var(--teal-deep); text-shadow: 3px 3px 0 var(--marigold); }
-.gate-names { font: 400 1.7rem/1 var(--script); color: var(--orange); margin: 0.6rem 0 1.2rem; }
-.gate-hint { font-size: 0.98rem; color: var(--ink-soft); margin: 0 0 0.75rem; }
+
+.gate-mdot-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 0.65rem;
+}
+.gate-mdot {
+  width: 6.2rem;
+  height: auto;
+  color: var(--teal-deep);
+  filter: drop-shadow(2px 2px 0 var(--mustard));
+}
+.gate-race-tag {
+  margin-top: 0.35rem;
+  font: 700 0.68rem/1.2 var(--text);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cream);
+  background: var(--brown);
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+}
+.gate-title { font: 400 2.8rem/1 var(--display); margin: 0.2rem 0 0; color: var(--teal-deep); text-shadow: 3px 3px 0 var(--marigold); }
+.gate-names { font: 400 1.65rem/1 var(--script); color: var(--orange); margin: 0.45rem 0 0.65rem; }
+.gate-piss-take {
+  font-size: 0.85rem;
+  font-style: italic;
+  line-height: 1.35;
+  color: var(--ink-soft);
+  background: rgba(233, 185, 73, 0.22);
+  border-left: 3px solid var(--orange);
+  padding: 0.45rem 0.65rem;
+  margin: 0 0 0.85rem;
+  border-radius: 0 4px 4px 0;
+  text-align: left;
+}
+.gate-hint { font-size: 0.95rem; color: var(--ink-soft); margin: 0 0 0.7rem; }
 .gate-input {
   width: 100%;
   font: 500 1.2rem var(--text);
@@ -133,8 +171,8 @@ button { font: inherit; }
 .gate-input::placeholder { color: rgba(91, 52, 36, 0.45); letter-spacing: 0.02em; }
 .gate-input:focus { outline: none; border-bottom-color: var(--teal); }
 .gate-input.is-invalid { border-bottom-color: var(--red-pen); }
-.gate-btn { width: 100%; margin-top: 1.5rem; }
-.gate-error { min-height: 1.5em; margin: 0.9rem 0 0; font-size: 0.98rem; color: var(--red-pen); }
+.gate-btn { width: 100%; margin-top: 1.35rem; }
+.gate-error { min-height: 1.5em; margin: 0.8rem 0 0; font-size: 0.95rem; color: var(--red-pen); }
 
 @keyframes shake {
   10%, 90% { transform: translateX(-2px); }
@@ -172,6 +210,11 @@ body.is-locked .topbar { display: none; }
   font: 600 0.95rem/1 var(--text);
   padding: 0.2rem;
   --pour: 0;
+  transition: opacity 0.25s ease, color 0.25s ease;
+}
+.pints a.is-locked-round {
+  opacity: 0.35;
+  pointer-events: none;
 }
 .pints svg { width: 15px; height: 21px; color: var(--brown); }
 .pint-beer { transform-box: fill-box; transform-origin: 50% 100%; transform: scaleY(var(--pour)); transition: transform 0.9s cubic-bezier(.3,.6,.3,1); }
@@ -465,6 +508,7 @@ body:not(.is-locked) .hero-cue { animation: fade-in 1s ease 2.6s both; }
 .wipe {
   position: absolute; inset: 0;
   border: 0; cursor: pointer;
+  touch-action: manipulation;
   background:
     repeating-linear-gradient(-28deg, rgba(241, 236, 224, 0.22) 0 2px, transparent 2px 6px),
     repeating-linear-gradient(32deg, rgba(241, 236, 224, 0.12) 0 1px, transparent 1px 7px),
@@ -539,7 +583,7 @@ body:not(.is-locked) .hero-cue { animation: fade-in 1s ease 2.6s both; }
   font-size: 1.08rem; line-height: 1.65;
 }
 .letter-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
-.airmail { margin: 0; font: 600 0.85rem/1 var(--text); color: var(--teal); border: 2px solid var(--teal); border-radius: 3px; padding: 0.35rem 0.6rem; transform: rotate(-3deg); letter-spacing: 0.06em; }
+.airmail { margin: 0; font: 600 0.8rem/1.1 var(--text); color: var(--teal); border: 2px solid var(--teal); border-radius: 3px; padding: 0.35rem 0.6rem; transform: rotate(-2deg); letter-spacing: 0.05em; text-transform: uppercase; }
 .letter-stamp { width: 4.2rem; height: auto; transform: rotate(4deg); filter: drop-shadow(1px 2px 0 rgba(0,0,0,.15)); }
 .letter-greeting { font: 400 clamp(2rem, 7vw, 2.6rem)/1.1 var(--script); color: var(--orange); margin: 0 0 1rem; }
 .letter-greeting:focus { outline: none; }
@@ -556,16 +600,42 @@ body:not(.is-locked) .hero-cue { animation: fade-in 1s ease 2.6s both; }
 .duties-title { margin: 0 0 0.5rem; font: 400 1.6rem/1 var(--display); color: var(--brown); }
 .duties dl { margin: 0; }
 .duties dl div { display: grid; grid-template-columns: 1fr; gap: 0.1rem; padding: 0.7rem 0; border-bottom: 1px dashed rgba(58, 36, 24, 0.25); }
-@media (min-width: 560px) { .duties dl div { grid-template-columns: 9rem 1fr; gap: 1.25rem; } }
+@media (min-width: 560px) { .duties dl div { grid-template-columns: 9.5rem 1fr; gap: 1.25rem; } }
 .duties dt { font: 600 1.05rem/1.5 var(--text); color: var(--orange); }
 .duties dd { margin: 0; line-height: 1.55; }
 
 .letter-paper .letter-sign { margin: 1.5rem 0 2rem; }
 .letter-sign span { display: block; font: 400 2.8rem/1.1 var(--script); color: #233552; margin-top: 0.1rem; }
 
-/* ---------- Acceptance ---------- */
+/* ---------- Acceptance & Lad Bib Picker ---------- */
 .accept { border-top: 2px solid var(--brown); padding-top: 1.5rem; }
-.accept-title { font: 400 1.6rem var(--display); margin: 0 0 0.75rem; text-align: center; color: var(--brown); }
+.accept-title { font: 400 1.5rem var(--display); margin: 0 0 0.75rem; text-align: center; color: var(--brown); }
+
+.lad-picker {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.9rem;
+  flex-wrap: wrap;
+}
+.lad-pill {
+  background: transparent;
+  border: 2px solid var(--brown);
+  color: var(--ink);
+  font: 600 0.9rem/1 var(--text);
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.lad-pill:hover { background: rgba(91, 52, 36, 0.08); }
+.lad-pill.is-active {
+  background: var(--orange);
+  border-color: var(--brown);
+  color: var(--cream);
+  box-shadow: 2px 2px 0 var(--brown);
+}
+
 .sign-pad {
   position: relative; height: 10rem;
   background: rgba(255, 255, 255, 0.5);
@@ -587,7 +657,11 @@ body:not(.is-locked) .hero-cue { animation: fade-in 1s ease 2.6s both; }
 .mark-slot { position: absolute; right: 0.6rem; top: 0.4rem; width: min(12rem, 52%); z-index: 3; pointer-events: none; color: var(--teal); }
 .mark-slot svg { display: block; width: 100%; height: auto; opacity: 0.85; mix-blend-mode: multiply; animation: mark-on 0.4s cubic-bezier(.2,1.4,.4,1) both; }
 .accept.is-signed canvas { cursor: default; pointer-events: none; }
-.accept.is-signed .sign-clear, .accept.is-signed .choices, .accept.is-signed .sign-typed, .accept.is-signed .no-choice-reply { display: none; }
+.accept.is-signed .sign-clear,
+.accept.is-signed .choices,
+.accept.is-signed .sign-typed,
+.accept.is-signed .lad-picker,
+.accept.is-signed .no-choice-reply { display: none; }
 
 .sign-typed { display: flex; align-items: baseline; gap: 0.75rem; margin: 0.9rem 0 1.25rem; font-size: 0.95rem; color: var(--ink-soft); }
 .sign-typed span { white-space: nowrap; }
@@ -609,8 +683,45 @@ body:not(.is-locked) .hero-cue { animation: fade-in 1s ease 2.6s both; }
   border-block: 2px solid var(--brown);
   animation: rise 0.7s cubic-bezier(.2,.7,.2,1) 0.4s both;
 }
+.confirmation-ironman {
+  display: inline-block;
+  margin: 0 0 0.4rem;
+  padding: 0.2rem 0.75rem;
+  background: var(--red-pen);
+  color: var(--cream);
+  font: 700 0.82rem/1.2 var(--text);
+  letter-spacing: 0.14em;
+  border-radius: 999px;
+}
 .confirmation-main { font: 400 clamp(1.5rem, 5vw, 2rem)/1.2 var(--display); margin: 0 0 0.5rem; color: var(--teal-deep); }
-.confirmation-next { margin: 0; font-weight: 500; color: var(--ink-soft); }
+.confirmation-next { margin: 0 0 1.25rem; font-weight: 500; color: var(--ink-soft); }
+
+.souvenir-wrap {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+.souvenir-canvas {
+  width: 100%;
+  max-width: 32rem;
+  height: auto;
+  border-radius: 8px;
+  border: 3px solid var(--brown);
+  box-shadow: 5px 5px 0 var(--brown);
+}
+.souvenir-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  width: 100%;
+}
+.souvenir-actions .btn {
+  flex: 1 1 13rem;
+  font-size: 0.98rem;
+}
 
 .terms { margin-top: 2.25rem; font-size: 0.98rem; line-height: 1.6; color: var(--ink-soft); }
 .terms h4 { font: 400 1.3rem var(--display); margin: 0 0 0.5rem; color: var(--brown); }
