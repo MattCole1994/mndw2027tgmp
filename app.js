@@ -1,7 +1,7 @@
 /* =========================================================
-   Groomsmen invite: Mitch, Brad and Liam
-   Gate, parallax beach bar, pints per round, postcards,
-   the quiz, the board, pop the cava, sign & souvenir bib.
+   IRONMAN XÀTIVA — Groomsmen Qualifier
+   Gate, parallax course, 4 triathlon legs, bullet-proof
+   bottle pop, and Ironman Souvenir Race Bib generator.
    ========================================================= */
 
 // SHA-256 of the passcode. Default passcode is "ashtongate".
@@ -17,19 +17,19 @@ const scrollTo = (el, block = "nearest") => el.scrollIntoView({ behavior: reduce
 
 /* ---------- Optional URL personalisation (?lad=mitch) ---------- */
 const LADS_MAP = {
-  mitch: { name: "Mitch", bib: "01" },
-  brad: { name: "Brad", bib: "02" },
-  liam: { name: "Liam", bib: "03" }
+  mitch: { name: "Mitch", bib: "001" },
+  brad: { name: "Brad", bib: "002" },
+  liam: { name: "Liam", bib: "003" }
 };
 let selectedLad = null;
-let selectedBib = "01";
+let selectedBib = "001";
 
 const urlLad = new URLSearchParams(window.location.search).get("lad")?.toLowerCase();
 if (urlLad && LADS_MAP[urlLad]) {
   selectedLad = LADS_MAP[urlLad].name;
   selectedBib = LADS_MAP[urlLad].bib;
   const heroTurn = $("#hero-turn");
-  if (heroTurn) heroTurn.textContent = `Your turn, ${selectedLad}.`;
+  if (heroTurn) heroTurn.textContent = `To the start line, ${selectedLad}.`;
 }
 
 /* ---------- Hashing ---------- */
@@ -76,21 +76,21 @@ function rejectAttempt(message) {
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const attempt = input.value.trim().toLowerCase();
-  if (!attempt) { rejectAttempt("Type the passcode first."); return; }
+  if (!attempt) { rejectAttempt("Enter the passcode to clear Transition 1."); return; }
   if (!window.crypto || !crypto.subtle) { rejectAttempt("This browser can’t check the passcode. Open the link over https."); return; }
   if ((await sha256(attempt)) === TARGET_HASH) {
     errorEl.textContent = "";
     rememberUnlock();
     unlock();
   } else {
-    rejectAttempt("Not that. Think every other Saturday in BS3.");
+    rejectAttempt("Penalty Card! Wrong answer. Think every other Saturday in BS3.");
   }
 });
 input.addEventListener("input", () => { input.classList.remove("is-invalid"); errorEl.textContent = ""; });
 
 if (isUnlocked()) unlock({ instant: true }); else input.focus();
 
-/* ---------- Top bar: a pint poured for each round reached ---------- */
+/* ---------- Top bar: Triathlon Legs ---------- */
 const topbar = $("#topbar");
 const hero = $(".hero");
 const roundLinks = $$("[data-round]");
@@ -168,7 +168,7 @@ if (!reduceMotion && layers.length) {
 }
 
 /* ---------- Confetti ---------- */
-const PALETTE = ["#e8622c", "#f2a03d", "#e9b949", "#1f6b70", "#fbf1dc", "#5b3424"];
+const PALETTE = ["#c8352a", "#e8622c", "#f2a03d", "#e9b949", "#1f6b70", "#fbf1dc"];
 
 function celebrate() {
   if (typeof window.confetti !== "function") return;
@@ -185,7 +185,7 @@ function celebrate() {
   })();
 }
 
-/* ---------- Round 1: postcards ---------- */
+/* ---------- Leg 1: Swim (Postcards) ---------- */
 const cards = $$("#cards .card");
 const cardStatus = $("#card-status");
 const ladsDone = $("#lads-done");
@@ -214,7 +214,7 @@ cards.forEach((card) => {
   });
 });
 
-/* ---------- Round 2: the quiz ---------- */
+/* ---------- Leg 2: Bike (The Quiz) ---------- */
 const PEN = '<svg class="pen" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M10,14 C20,4 62,2 84,6 C98,9 99,22 90,30 C78,38 40,39 20,35 C6,32 2,22 12,13"/></svg>';
 const TICK = '<svg class="q-mark" viewBox="0 0 30 30" aria-hidden="true"><path pathLength="1" d="M4,16 L12,24 L27,4"/></svg>';
 const CROSS = '<svg class="q-mark" viewBox="0 0 30 30" aria-hidden="true"><path pathLength="1" d="M6,6 L24,24 M24,6 L6,24"/></svg>';
@@ -234,7 +234,7 @@ questions.forEach((q, i) => {
       const right = btn.hasAttribute("data-correct");
       if (right) score += 1;
       q.insertAdjacentHTML("beforeend", right ? TICK : CROSS);
-      $(".q-reply", q).textContent = btn.dataset.reply || (right ? "Correct." : "Not quite.");
+      $(".q-reply", q).textContent = btn.dataset.reply || (right ? "Correct." : "Penalty!");
       scoreEl.textContent = `${score} / ${i + 1}`;
       buzz(10);
       q.classList.remove("is-current");
@@ -248,11 +248,11 @@ questions.forEach((q, i) => {
         } else {
           unlockRoundNav("board");
           if (score === questions.length) {
-            verdictText.textContent = `${score} out of ${questions.length}. Sub-9 hour pace. First pint in Xàtiva is on me.`;
+            verdictText.textContent = `${score} / ${questions.length} Splits. Kona World Championship standard — first pint in Xàtiva is on me.`;
           } else if (score >= 3) {
-            verdictText.textContent = `${score} out of ${questions.length}. Solid Zone 2 effort. Fit for duty.`;
+            verdictText.textContent = `${score} / ${questions.length} Splits. Solid Zone 2 effort. Bike racked in T2.`;
           } else {
-            verdictText.textContent = `${score} out of ${questions.length}. Shocking splits, you’re on baggage duty — but you’re still in.`;
+            verdictText.textContent = `${score} / ${questions.length} Splits. Shocking wattage, you’re in the penalty tent — but you still qualify.`;
           }
           verdict.hidden = false;
           scrollTo(verdict);
@@ -263,7 +263,7 @@ questions.forEach((q, i) => {
   });
 });
 
-/* ---------- Round 3: wipe the board ---------- */
+/* ---------- Leg 3: Run (Wipe the Board) ---------- */
 const wipes = $$(".wipe");
 const boardNext = $("#board-next");
 let wiped = 0;
@@ -285,20 +285,24 @@ wipes.forEach((btn) => {
   });
 });
 
-/* ---------- Round 4: hold to pop the cava ---------- */
+/* ---------- Leg 4: Bulletproof Podium Cava Pop ---------- */
 const pop = $("#pop");
 const stage = $("#bottle-stage");
 const ring = $(".pop-ring circle");
 const popHint = $("#pop-hint");
 const bottleWrap = $("#bottle-wrap");
 const letter = $("#letter");
-const HOLD_MS = 1000;
+const HOLD_MS = 650; // Snappier hold time (0.65s)
 let progress = 0;
 let holding = false;
 let popped = false;
 let holdStart = 0;
+let rafId = null;
 
-const setProgress = (p) => { progress = p; ring.style.strokeDashoffset = String(1 - p); };
+const setProgress = (p) => {
+  progress = Math.max(0, Math.min(1, p));
+  if (ring) ring.style.strokeDashoffset = String(1 - progress);
+};
 
 function popSound() {
   try {
@@ -329,55 +333,68 @@ function spray() {
   if (typeof window.confetti !== "function") return;
   const r = stage.getBoundingClientRect();
   const origin = { x: (r.left + r.width / 2) / window.innerWidth, y: Math.max(0.05, (r.top + r.height * 0.22) / window.innerHeight) };
-  confetti({ particleCount: 90, angle: 80, spread: 35, startVelocity: 48, gravity: 1.1, ticks: 140, origin, colors: ["#fbf1dc", "#fff8e6", "#f6e7b8", "#e9b949"], scalar: 0.8, disableForReducedMotion: true });
+  confetti({ particleCount: 95, angle: 80, spread: 40, startVelocity: 48, gravity: 1.1, ticks: 140, origin, colors: ["#fbf1dc", "#fff8e6", "#f6e7b8", "#e9b949"], scalar: 0.85, disableForReducedMotion: true });
 }
 
 function holdStep(t) {
   if (!holding || popped) return;
   const p = Math.min((t - holdStart) / HOLD_MS, 1);
   setProgress(p);
-  if (p >= 1) { popCork(); return; }
-  requestAnimationFrame(holdStep);
+  if (p >= 1) {
+    popCork();
+    return;
+  }
+  rafId = requestAnimationFrame(holdStep);
 }
 
-function releaseHold() {
-  if (!holding || popped) return;
-  holding = false;
-  stage.classList.remove("is-pressing");
-  if (progress > 0.05) popHint.textContent = "Keep going, it’s nearly out";
-  const from = progress;
-  const t0 = performance.now();
-  (function drain(t) {
-    if (holding || popped) return;
-    const p = Math.max(from - ((t - t0) / 350) * from, 0);
-    setProgress(p);
-    if (p > 0) requestAnimationFrame(drain);
-  })(t0);
-}
-
-pop.addEventListener("pointerdown", (e) => {
-  if (popped || e.button > 0) return;
-  e.preventDefault();
-  try { pop.setPointerCapture(e.pointerId); } catch { /* fine */ }
+function startHold(e) {
+  if (popped) return;
+  if (e.type === "mousedown" && e.button !== 0) return;
+  if (e.cancelable) e.preventDefault();
   holding = true;
   stage.classList.add("is-pressing");
   holdStart = performance.now() - progress * HOLD_MS;
   buzz(10);
-  requestAnimationFrame(holdStep);
-});
-["pointerup", "pointercancel", "lostpointercapture"].forEach((type) => pop.addEventListener(type, releaseHold));
+  if (rafId) cancelAnimationFrame(rafId);
+  rafId = requestAnimationFrame(holdStep);
+}
+
+function endHold() {
+  if (!holding || popped) return;
+  holding = false;
+  stage.classList.remove("is-pressing");
+  if (rafId) cancelAnimationFrame(rafId);
+
+  // Also add +0.38 boost per tap so tapping 3 times pops the bottle even if they don't hold!
+  const boosted = Math.min(1, progress + 0.35);
+  setProgress(boosted);
+  if (boosted >= 1) {
+    popCork();
+    return;
+  }
+  popHint.textContent = "Keep shaking — tap or hold again to pop it!";
+}
+
+pop.addEventListener("pointerdown", startHold);
+window.addEventListener("pointerup", endHold);
 pop.addEventListener("contextmenu", (e) => e.preventDefault());
-pop.addEventListener("click", (e) => { if (e.detail === 0) popCork(); });
+pop.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" || e.key === " ") {
+    e.preventDefault();
+    popCork();
+  }
+});
 
 function popCork() {
   if (popped) return;
   popped = true;
   holding = false;
+  if (rafId) cancelAnimationFrame(rafId);
   setProgress(1);
   stage.classList.remove("is-pressing");
   stage.classList.add("is-popped");
   pop.setAttribute("aria-disabled", "true");
-  popHint.textContent = "Salud.";
+  popHint.textContent = "Podium Finish! Salud.";
   popSound();
   spray();
   buzz([20, 40, 60]);
@@ -390,11 +407,11 @@ function popCork() {
     scrollTo(letter, "start");
   };
   if (reduceMotion) { showLetter(); return; }
-  setTimeout(() => bottleWrap.classList.add("is-gone"), 1500);
-  setTimeout(showLetter, 2100);
+  setTimeout(() => bottleWrap.classList.add("is-gone"), 1300);
+  setTimeout(showLetter, 1850);
 }
 
-/* ---------- Sign, Lad Picker, and Souvenir Generator ---------- */
+/* ---------- Sign, Lad Picker, and Ironman Souvenir Generator ---------- */
 const accept = $("#accept");
 const canvas = $("#sign-canvas");
 const ctx = canvas.getContext("2d");
@@ -417,7 +434,6 @@ let handInk = false;
 let drawing = false;
 let last = null;
 
-// Pre-select pill if URL had ?lad=
 ladPills.forEach((pill) => {
   if (selectedLad && pill.dataset.lad === selectedLad) {
     pill.classList.add("is-active");
@@ -531,7 +547,7 @@ nameInput.addEventListener("input", () => {
 });
 
 noChoice.addEventListener("click", () => {
-  noChoiceReply.textContent = "No. Mandatory race entry. And it’s your round anyway.";
+  noChoiceReply.textContent = "Zero chance of a DNF. Sign the waiver — and it’s your round anyway.";
   noChoice.hidden = true;
   scrollTo($(".sign-pad"), "center");
 });
@@ -542,22 +558,22 @@ function renderSouvenirBib() {
   const W = souvenirCanvas.width;
   const H = souvenirCanvas.height;
   const ladName = selectedLad || nameInput.value.trim() || "Official Lad";
-  const bibNo = selectedBib || "01";
+  const bibNo = selectedBib || "001";
   const finalScore = `${score} / ${questions.length}`;
 
   // Background cream card
   sctx.fillStyle = "#fbf1dc";
   sctx.fillRect(0, 0, W, H);
 
-  // Retro 70s triple top & bottom stripes
-  const stripeColors = ["#e9b949", "#e8622c", "#5b3424"];
+  // Top & Bottom Ironman Red + Retro Stripes
+  const stripeColors = ["#c8352a", "#e8622c", "#e9b949"];
   stripeColors.forEach((c, idx) => {
     sctx.fillStyle = c;
     sctx.fillRect(0, idx * 10, W, 10);
     sctx.fillRect(0, H - (3 - idx) * 10, W, 10);
   });
 
-  // Corner punch holes (like a real race bib)
+  // Corner punch holes (race bib eyelets)
   sctx.fillStyle = "#ecd4a8";
   sctx.strokeStyle = "#5b3424";
   sctx.lineWidth = 3;
@@ -568,69 +584,69 @@ function renderSouvenirBib() {
     sctx.stroke();
   });
 
-  // Top header banner
-  sctx.fillStyle = "#134a50";
-  sctx.font = "700 20px Jost, sans-serif";
+  // Header Banner
+  sctx.fillStyle = "#c8352a";
+  sctx.font = "800 22px Jost, sans-serif";
   sctx.textAlign = "center";
-  sctx.fillText("IRONMAN® 70.3 XÀTIVA • OFFICIAL GROOMSMAN RACE BIB", W / 2, 72);
+  sctx.fillText("IRONMAN® 70.3 XÀTIVA • OFFICIAL GROOMSMAN CHAMPIONSHIP", W / 2, 68);
 
-  // Giant Bib Number & Name
-  sctx.fillStyle = "#e8622c";
-  sctx.font = "400 32px Yellowtail, cursive";
-  sctx.fillText("Matt & Dasha • 21 August 2027", W / 2, 114);
+  sctx.fillStyle = "#134a50";
+  sctx.font = "400 30px Yellowtail, cursive";
+  sctx.fillText("Matt & Dasha • Hotel Montsant • 21 August 2027", W / 2, 108);
 
+  // Giant Bib Number & Athlete Name
   sctx.fillStyle = "#3a2418";
-  sctx.font = "400 105px Shrikhand, Georgia, serif";
-  sctx.fillText(`#${bibNo} ${ladName.toUpperCase()}`, W / 2, 220);
+  sctx.font = "400 100px Shrikhand, Georgia, serif";
+  sctx.fillText(`#${bibNo} ${ladName.toUpperCase()}`, W / 2, 212);
 
-  // Stats bar
+  // Telemetry Splits Bar
   sctx.fillStyle = "#1f6b70";
-  sctx.fillRect(70, 250, W - 140, 44);
+  sctx.fillRect(60, 240, W - 120, 48);
   sctx.fillStyle = "#fbf1dc";
-  sctx.font = "600 18px Jost, sans-serif";
-  sctx.fillText(`VENUE: HOTEL MONTSANT   |   QUIZ SPLIT: ${finalScore}   |   DUTY: STAG & SPEECHES`, W / 2, 278);
+  sctx.font = "700 17px Jost, sans-serif";
+  sctx.fillText(`SWIM: 3.8KM THATCHERS   |   REFEREE QUIZ: ${finalScore}   |   DUTY: STAG & SPEECHES`, W / 2, 270);
 
   // Copy user's drawn signature from #sign-canvas
-  sctx.strokeStyle = "rgba(58, 36, 24, 0.4)";
+  sctx.strokeStyle = "rgba(58, 36, 24, 0.45)";
   sctx.lineWidth = 2;
   sctx.beginPath();
-  sctx.moveTo(140, 445);
-  sctx.lineTo(560, 445);
+  sctx.moveTo(110, 455);
+  sctx.lineTo(550, 455);
   sctx.stroke();
 
   sctx.fillStyle = "#6b4a36";
-  sctx.font = "500 15px Jost, sans-serif";
+  sctx.font = "600 14px Jost, sans-serif";
   sctx.textAlign = "left";
-  sctx.fillText("ATHLETE WAIVER SIGNATURE (BINDING + 1 DANCE WITH NAN):", 140, 470);
+  sctx.fillText("ATHLETE WAIVER SIGNATURE (BINDING + 1 DANCE WITH NAN):", 110, 480);
 
   // Draw signature canvas scaled into the bib
-  sctx.drawImage(canvas, 140, 315, 420, 125);
+  sctx.drawImage(canvas, 110, 320, 440, 130);
 
-  // Stamp seal on the right
+  // Finisher Stamp on the right
   sctx.save();
-  sctx.translate(715, 390);
+  sctx.translate(720, 395);
   sctx.rotate(-0.14);
   sctx.strokeStyle = "#c8352a";
-  sctx.lineWidth = 4;
+  sctx.lineWidth = 4.5;
   sctx.beginPath();
-  sctx.arc(0, 0, 64, 0, Math.PI * 2);
+  sctx.arc(0, 0, 68, 0, Math.PI * 2);
   sctx.stroke();
   sctx.beginPath();
-  sctx.arc(0, 0, 54, 0, Math.PI * 2);
+  sctx.arc(0, 0, 57, 0, Math.PI * 2);
   sctx.stroke();
   sctx.fillStyle = "#c8352a";
   sctx.textAlign = "center";
-  sctx.font = "700 16px Jost, sans-serif";
-  sctx.fillText("XÀTIVA 2027", 0, -16);
-  sctx.font = "700 22px Jost, sans-serif";
-  sctx.fillText("QUALIFIED", 0, 8);
-  sctx.font = "600 13px Jost, sans-serif";
-  sctx.fillText("NO DNF ALLOWED", 0, 28);
+  sctx.font = "800 15px Jost, sans-serif";
+  sctx.fillText("IRONMAN XÀTIVA", 0, -18);
+  sctx.font = "800 22px Jost, sans-serif";
+  sctx.fillText("FINISHER", 0, 7);
+  sctx.font = "700 13px Jost, sans-serif";
+  sctx.fillText("SUB-4AM CUTOFF", 0, 27);
   sctx.restore();
 
   // Set WhatsApp status deep link
   const waText = encodeURIComponent(
-    `Bib #${bibNo} (${ladName}) signed and locked in for Xàtiva 2027 🍻🇪🇸 Quiz score: ${finalScore}. First job: the stag.`
+    `🏊‍♂️🚴‍♂️🏃‍♂️ Bib #${bibNo} (${ladName}) officially qualified for IRONMAN Xàtiva 2027! Referee Quiz: ${finalScore}. First job: the stag 🍻🇪🇸`
   );
   whatsappLink.href = `https://wa.me/?text=${waText}`;
 }
@@ -639,24 +655,23 @@ shareSouvenirBtn.addEventListener("click", async () => {
   souvenirCanvas.toBlob(async (blob) => {
     if (!blob) return;
     const ladSlug = (selectedLad || "groomsman").toLowerCase();
-    const file = new File([blob], `xativa-2027-bib-${ladSlug}.png`, { type: "image/png" });
+    const file = new File([blob], `ironman-xativa-2027-bib-${ladSlug}.png`, { type: "image/png" });
 
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       try {
         await navigator.share({
           files: [file],
-          title: "Official Groomsman Race Bib — Xàtiva 2027",
-          text: "Signed and qualified for Xàtiva 2027 🍻"
+          title: "IRONMAN Xàtiva 2027 — Groomsman Race Bib",
+          text: "Signed the waiver and qualified for Xàtiva 2027 🍻"
         });
         return;
       } catch { /* user cancelled or share failed, fall back to download */ }
     }
 
-    // Fallback: direct image download
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `xativa-2027-bib-${ladSlug}.png`;
+    a.download = `ironman-xativa-2027-bib-${ladSlug}.png`;
     document.body.appendChild(a);
     a.click();
     a.remove();
@@ -673,7 +688,7 @@ signAnswer.addEventListener("click", () => {
 
   const displayLad = selectedLad || nameInput.value.trim();
   if (displayLad) {
-    confirmationIronman.textContent = `${displayLad.toUpperCase()}, YOU ARE A GROOMSMAN!`;
+    confirmationIronman.textContent = `${displayLad.toUpperCase()}, YOU ARE AN IRONMAN GROOMSMAN!`;
   }
 
   renderSouvenirBib();
