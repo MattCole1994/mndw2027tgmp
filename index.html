@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="robots" content="noindex, nofollow" />
   <meta name="theme-color" content="#f4e3c3" />
-  <title>Lads only</title>
+  <title>Lads only — Xàtiva 70.3 Qualifier</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍺</text></svg>" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -18,6 +18,35 @@
   <!-- ================= SHARED DRAWINGS ================= -->
   <svg class="sprite" aria-hidden="true" focusable="false">
     <defs>
+      <!-- Ironman Full Wordmark + M-Dot Symbol -->
+      <symbol id="ironman-logo" viewBox="0 0 380 115">
+        <!-- Red M-Dot Head -->
+        <circle cx="209" cy="18" r="13" fill="#c8352a" />
+        <!-- Wordmark: I R O N [M] A N -->
+        <g fill="currentColor">
+          <!-- I -->
+          <rect x="12" y="38" width="18" height="58" rx="1.5" />
+          <!-- R -->
+          <path d="M40,38 H74 C86,38 93,45 93,55 C93,63 88,69 80,71 L95,96 H75 L62,73 H57 V96 H40 Z M57,51 V62 H71 C75,62 77,59 77,56.5 C77,54 75,51 71,51 Z" />
+          <!-- O -->
+          <path d="M128,36 C148,36 160,49 160,67 C160,85 148,98 128,98 C108,98 96,85 96,67 C96,49 108,36 128,36 Z M128,51 C118,51 114,58 114,67 C114,76 118,83 128,83 C138,83 142,76 142,67 C142,58 138,51 128,51 Z" />
+          <!-- N -->
+          <path d="M168,38 H185 L205,71 V38 H221 V96 H205 L184,62 V96 H168 Z" transform="translate(-4, 0)" />
+          <!-- M (The M-Dot Arch) -->
+          <path d="M222,96 L236,38 H261 L273,68 L285,38 H310 L324,96 H305 L296,57 L281,96 H265 L250,57 L241,96 Z" fill="#e8622c" />
+          <!-- A -->
+          <path d="M342,38 H362 L380,96 H362 L359,84 H345 L342,96 H325 Z M348,71 H356 L352,53 Z" transform="translate(-3, 0)" />
+        </g>
+        <!-- Red M-Dot repositioned directly over the M arch -->
+        <circle cx="270" cy="18" r="12.5" fill="#c8352a" />
+      </symbol>
+
+      <!-- Standalone M-Dot Icon -->
+      <symbol id="mdot" viewBox="0 0 240 130">
+        <circle cx="120" cy="22" r="16" fill="#c8352a" />
+        <path d="M25,120 L52,42 L98,42 L120,84 L142,42 L188,42 L215,120 L178,120 L162,72 L134,120 L106,120 L78,72 L62,120 Z" fill="currentColor" />
+      </symbol>
+
       <!-- Robin on a twig (City) -->
       <symbol id="robin" viewBox="0 0 100 90">
         <path d="M8,74 Q40,66 92,70" fill="none" stroke="#5b3424" stroke-width="4" stroke-linecap="round"/>
@@ -38,7 +67,7 @@
         <circle cx="40" cy="58" r="22" fill="#f2a03d"/>
         <rect x="7" y="62" width="66" height="27" fill="#16545a"/>
         <use href="#robin" x="14" y="26" width="52" height="47"/>
-        <text x="40" y="84" text-anchor="middle" font-family="Jost, Futura, sans-serif" font-size="8" font-weight="600" fill="#fbf1dc">ESPAÑA 21 August 27</text>
+        <text x="40" y="84" text-anchor="middle" font-family="Jost, Futura, sans-serif" font-size="8" font-weight="600" fill="#fbf1dc">ESPAÑA 21 AUG 27</text>
       </symbol>
 
       <!-- Postmark -->
@@ -66,18 +95,22 @@
     </defs>
   </svg>
 
-  <!-- ================= GATE ================= -->
+  <!-- ================= GATE (IRONMAN RACE CHECK-IN PARODY) ================= -->
   <div id="gate" class="gate" role="dialog" aria-modal="true" aria-labelledby="gate-title">
     <form id="gate-form" class="gate-card" autocomplete="off" novalidate>
-      <svg class="gate-robin" viewBox="0 0 100 90" aria-hidden="true"><use href="#robin"/></svg>
+      <div class="gate-mdot-wrap" aria-hidden="true">
+        <svg class="gate-mdot" viewBox="0 0 240 130"><use href="#mdot"/></svg>
+        <span class="gate-race-tag">IRONMAN® 70.3 XÀTIVA • ATHLETE CHECK-IN</span>
+      </div>
       <h1 id="gate-title" class="gate-title">Lads only</h1>
       <p class="gate-names">Mitch, Brad &amp; Liam</p>
+      <p class="gate-piss-take">Calm down, it’s not a race report — I just couldn’t build a website without mentioning I’ve done an Ironman.</p>
       <!-- EDIT: your hint (default passcode is "ashtongate") -->
-      <p class="gate-hint">Hint: Where is the theatre of disappointment. One word, it's the hope that kills you.</p>
+      <p class="gate-hint">Hint: Where is the theatre of disappointment? One word, it’s the hope that kills you.</p>
       <label for="passcode" class="sr-only">Passcode</label>
       <input id="passcode" name="passcode" type="password" class="gate-input"
              placeholder="Passcode" autocapitalize="none" spellcheck="false" required />
-      <button type="submit" class="btn btn-orange gate-btn">Let me in</button>
+      <button type="submit" class="btn btn-orange gate-btn">Enter Transition (T1)</button>
       <p id="gate-error" class="gate-error" role="alert" aria-live="assertive"></p>
     </form>
   </div>
@@ -87,9 +120,9 @@
     <a href="#top" class="topbar-mark">Matt &amp; Dasha</a>
     <nav class="pints" aria-label="Rounds">
       <a href="#lads" data-round="lads" aria-label="Round one, the lads"><svg viewBox="0 0 20 28" aria-hidden="true"><use href="#pint"/></svg><span aria-hidden="true">1</span></a>
-      <a href="#quiz-round" data-round="quiz-round" aria-label="Round two, the quiz"><svg viewBox="0 0 20 28" aria-hidden="true"><use href="#pint"/></svg><span aria-hidden="true">2</span></a>
-      <a href="#board" data-round="board" aria-label="Round three, the board"><svg viewBox="0 0 20 28" aria-hidden="true"><use href="#pint"/></svg><span aria-hidden="true">3</span></a>
-      <a href="#last-call" data-round="last-call" aria-label="Round four, last call"><svg viewBox="0 0 20 28" aria-hidden="true"><use href="#pint"/></svg><span aria-hidden="true">4</span></a>
+      <a href="#quiz-round" data-round="quiz-round" class="is-locked-round" aria-label="Round two, the quiz"><svg viewBox="0 0 20 28" aria-hidden="true"><use href="#pint"/></svg><span aria-hidden="true">2</span></a>
+      <a href="#board" data-round="board" class="is-locked-round" aria-label="Round three, the board"><svg viewBox="0 0 20 28" aria-hidden="true"><use href="#pint"/></svg><span aria-hidden="true">3</span></a>
+      <a href="#last-call" data-round="last-call" class="is-locked-round" aria-label="Round four, last call"><svg viewBox="0 0 20 28" aria-hidden="true"><use href="#pint"/></svg><span aria-hidden="true">4</span></a>
     </nav>
     <span class="topbar-date">Xàtiva 21 August 2027</span>
   </header>
@@ -205,11 +238,9 @@
 
       <div class="hero-copy">
         <div class="hero-top">
-          <p class="hero-kicker">For Mitch, Brad &amp; Liam</p>
-          <!-- EDIT -->
-          <h1 class="hero-title">Dasha said yes. <span>Your turn, lads.</span></h1>
-          <!-- EDIT -->
-          <p class="hero-sub">Matt &amp; Dasha are getting married in Spain. Before I ask you something, you’ve got to earn it. Four rounds first.</p>
+          <p class="hero-kicker" id="hero-kicker">For Mitch, Brad &amp; Liam</p>
+          <h1 class="hero-title">Dasha said yes. <span id="hero-turn">Your turn, lads.</span></h1>
+          <p class="hero-sub">Matt &amp; Dasha are getting married in Spain. Before I ask you something, you’ve got to earn it. Four legs to the course first — no drafting allowed.</p>
         </div>
         <div class="hero-bottom">
           <a class="hero-cue" href="#lads">Get the beers in</a>
@@ -223,14 +254,12 @@
         <span class="chapter-no" aria-hidden="true">1</span>
         <div>
           <h2 id="ch1" class="chapter-title">The lads</h2>
-          <!-- EDIT -->
           <p class="chapter-intro">Ashton Gate, a pint in the City Bar, away matches on pure hope. We always turn up expecting the best and leave disappointed. Then North Street, Thekla, town, and somehow Popworld or Rams. Chat shit for hours, music up, another Thatchers. Wouldn’t change a thing.</p>
         </div>
       </header>
 
       <p class="game-status">Three postcards. Turn each one over.</p>
 
-      <!-- EDIT: one postcard per lad. Front: name and how long. Back: the message. Below: the memory. -->
       <ul class="cards" id="cards">
         <li>
           <button type="button" class="card card-teal" aria-label="Turn over Mitch’s postcard">
@@ -238,7 +267,7 @@
               <span class="card-face card-front">
                 <span class="card-greet">Greetings from</span>
                 <strong class="card-name">Mitch</strong>
-                <span class="card-sub">The brother</span>
+                <span class="card-sub">The brother • Bib #01</span>
               </span>
               <span class="card-face card-back">
                 <span class="card-msg">Didn’t get a say in it, but here we are. Known me longer than anyone and still answers the phone.</span>
@@ -254,7 +283,7 @@
               <span class="card-face card-front">
                 <span class="card-greet">Greetings from</span>
                 <strong class="card-name">Brad</strong>
-                <span class="card-sub">Since Broadlands</span>
+                <span class="card-sub">Since Broadlands • Bib #02</span>
               </span>
               <span class="card-face card-back">
                 <span class="card-msg">If Brad says he’ll be there, he’s there. Normally with a bottle of Lucozade and some snacks. Been that way since we were kids.</span>
@@ -270,10 +299,10 @@
               <span class="card-face card-front">
                 <span class="card-greet">Greetings from</span>
                 <strong class="card-name">Liam</strong>
-                <span class="card-sub">Since he took my goalkicks</span>
+                <span class="card-sub">Since he took my goalkicks • Bib #03</span>
               </span>
               <span class="card-face card-back">
-                <span class="card-msg">From Ashton boys to weekly trips to watch the city. Still there to call me out on my crap. Occasionally convincing me I've got Dutch jury service.</span>
+                <span class="card-msg">From Ashton boys to weekly trips to watch the City. Still there to call me out on my crap. Occasionally convincing me I've got Dutch jury service.</span>
                 <span class="card-addr"><svg class="card-stamp" viewBox="0 0 80 96" aria-hidden="true"><use href="#stamp"/></svg><span>Liam</span><span>Whitchurch</span><span>Bristol</span></span>
               </span>
             </span>
@@ -284,9 +313,8 @@
 
       <p id="card-status" class="sr-only" role="status" aria-live="polite"></p>
       <div id="lads-done" class="done" hidden>
-        <!-- EDIT -->
-        <p class="done-text">Cheers for sticking around this long. You’re not off the hook yet.</p>
-        <a class="next-link" href="#quiz-round">On to the quiz</a>
+        <p class="done-text">Swim leg complete. Cheers for sticking around this long — you’re not off the hook yet.</p>
+        <a class="next-link" href="#quiz-round">Into T1: The quiz</a>
       </div>
     </section>
 
@@ -296,41 +324,40 @@
         <span class="chapter-no" aria-hidden="true">2</span>
         <div>
           <h2 id="ch2" class="chapter-title">The quiz</h2>
-          <p class="chapter-intro">A short assessment of your suitability for the role. Answer honestly. Your quizmaster is the groom, and he’s marking.</p>
+          <p class="chapter-intro">A short technical assessment of your suitability for the role. Answer honestly. Your race referee is the groom, and he’s marking.</p>
         </div>
       </header>
 
       <div class="sheet">
         <div class="sheet-head">
-          <p class="sheet-bar">The Stag</p>
+          <p class="sheet-bar">The Stag Qualifier</p>
           <p class="sheet-score">Score <span id="score">0</span></p>
         </div>
-        <!-- EDIT: questions, answers, right answers (data-correct) and the replies -->
         <ol class="quiz" id="quiz">
           <li class="q is-current">
             <p class="q-text">3am. The groom is being sick in a plant pot outside the hotel. You…</p>
             <div class="q-answers">
-              <button type="button" class="ans" data-correct data-reply="Correct. Then a pint in the morning.">Rub his back and hand him a water</button>
+              <button type="button" class="ans" data-correct data-reply="Correct. Electrolytes and a pint in the morning.">Rub his back and hand him a water</button>
               <button type="button" class="ans" data-correct data-reply="Also correct. Evidence matters.">Hold him steady and film it</button>
-              <button type="button" class="ans" data-reply="Wrong. Nobody gets left behind">Pretend you’ve never met him</button>
+              <button type="button" class="ans" data-reply="Wrong. Nobody gets a DNF on night one.">Pretend you’ve never met him</button>
             </div>
             <p class="q-reply" aria-live="polite"></p>
           </li>
           <li class="q">
-            <p class="q-text">The groom has mentioned triathlon for the fourth time tonight. You…</p>
+            <p class="q-text">The groom has mentioned triathlon, Zone 2, or his bike for the fourth time tonight. You…</p>
             <div class="q-answers">
-              <button type="button" class="ans" data-correct data-reply="Correct. Works every time.">Tell him if he mentions it again, it's shots.</button>
-              <button type="button" class="ans" data-reply="Correct. He's immediately shut up">Ask him if he's ever done an Ironman?</button>
-              <button type="button" class="ans" data-correct data-reply="Correct. Bold, but effective.">Hide his watch</button>
+              <button type="button" class="ans" data-correct data-reply="Correct. Works every time.">Tell him if he mentions it again, it's shots</button>
+              <button type="button" class="ans" data-correct data-reply="Correct. He's immediately shut up.">Ask him if he's ever done an Ironman?</button>
+              <button type="button" class="ans" data-correct data-reply="Correct. If it's not on Garmin, did the stag even happen?">Hide his Garmin watch</button>
             </div>
             <p class="q-reply" aria-live="polite"></p>
           </li>
           <li class="q">
             <p class="q-text">Josh has been talking for forty minutes. Nobody knows what about. You…</p>
             <div class="q-answers">
-              <button type="button" class="ans" data-correct data-reply="Correct. Spoken like a true hero.">Plan an escape and save Matt</button>
+              <button type="button" class="ans" data-correct data-reply="Correct. Spoken like a true domestique.">Plan an escape and save Matt</button>
               <button type="button" class="ans" data-correct data-reply="Correct. Keeps his mouth busy.">Get him another drink</button>
-              <button type="button" class="ans" data-reply="Rookie error. That’s another forty minutes.">Ask a follow-up question</button>
+              <button type="button" class="ans" data-reply="Rookie error. That’s a two-hour time penalty.">Ask a follow-up question</button>
             </div>
             <p class="q-reply" aria-live="polite"></p>
           </li>
@@ -339,14 +366,14 @@
             <div class="q-answers">
               <button type="button" class="ans" data-correct data-reply="Correct. He signed up for this.">Whatever the lads picked, no questions</button>
               <button type="button" class="ans" data-correct data-reply="Correct, Eggman would be proud.">Whatever’s cheapest at the airport</button>
-              <button type="button" class="ans" data-reply="Wrong. Nobody needs to see this...">Nothing...</button>
+              <button type="button" class="ans" data-reply="Wrong. Nobody needs to see a lycra trisuit in town...">A skin-tight trisuit and aero helmet</button>
             </div>
             <p class="q-reply" aria-live="polite"></p>
           </li>
           <li class="q">
             <p class="q-text">Last night of the stag. The groom starts a speech about how much he loves you all.</p>
             <div class="q-answers">
-              <button type="button" class="ans" data-correct data-reply="Correct. Wedding material.">Film it</button>
+              <button type="button" class="ans" data-correct data-reply="Correct. Blackmail material banked.">Film it</button>
               <button type="button" class="ans" data-correct data-reply="Correct. Quick thinking.">Get another round in before he cries</button>
               <button type="button" class="ans" data-reply="Wrong. One of you has to hold it together.">Join in</button>
             </div>
@@ -367,21 +394,21 @@
         <span class="chapter-no" aria-hidden="true">3</span>
         <div>
           <h2 id="ch3" class="chapter-title">The board</h2>
-          <p class="chapter-intro">The details, in chalk. Wipe each line to read it.</p>
+          <p class="chapter-intro">The race briefing, in chalk. Wipe each line to read it.</p>
         </div>
       </header>
 
       <div class="slate">
         <p class="slate-title">Matt &amp; Dasha</p>
-        <!-- EDIT: venue and date -->
         <dl class="slate-rows">
-          <div class="slate-row"><dt>Where</dt><dd><span class="chalk-text" aria-hidden="true">Hotel Mont Sant Xàtiva, Spain.</span><button type="button" class="wipe">Wipe where</button></dd></div>
-          <div class="slate-row"><dt>When</dt><dd><span class="chalk-text" aria-hidden="true">21 August, 2027</span><button type="button" class="wipe">Wipe when</button></dd></div>
+          <div class="slate-row"><dt>Where</dt><dd><span class="chalk-text" aria-hidden="true">Hotel Montsant, Xàtiva, Spain.</span><button type="button" class="wipe">Wipe where</button></dd></div>
+          <div class="slate-row"><dt>When</dt><dd><span class="chalk-text" aria-hidden="true">21 August 2027.</span><button type="button" class="wipe">Wipe when</button></dd></div>
           <div class="slate-row"><dt>The stag</dt><dd><span class="chalk-text" aria-hidden="true">To be decided. By you.</span><button type="button" class="wipe">Wipe the stag</button></dd></div>
-          <div class="slate-row"><dt>Forecast</dt><dd><span class="chalk-text" aria-hidden="true">Anything but rain please</span><button type="button" class="wipe">Wipe the forecast</button></dd></div>
+          <div class="slate-row"><dt>Cut-off</dt><dd><span class="chalk-text" aria-hidden="true">4am. Or when the Thatchers runs out.</span><button type="button" class="wipe">Wipe cut-off time</button></dd></div>
+          <div class="slate-row"><dt>Forecast</dt><dd><span class="chalk-text" aria-hidden="true">32°C. Factor 50 and shade.</span><button type="button" class="wipe">Wipe the forecast</button></dd></div>
         </dl>
       </div>
-      <a id="board-next" class="next-link" href="#last-call" hidden>Last call</a>
+      <a id="board-next" class="next-link" href="#last-call" hidden>The finish chute: Last call</a>
     </section>
 
     <!-- ================= ROUND 4: LAST CALL ================= -->
@@ -416,23 +443,21 @@
       <article id="letter" class="letter" hidden>
         <div class="letter-paper">
           <div class="letter-top">
-            <p class="airmail">Por avión</p>
+            <p class="airmail">Por avión • Official Athlete Waiver</p>
             <svg class="letter-stamp" viewBox="0 0 80 96" aria-hidden="true"><use href="#stamp"/></svg>
           </div>
-          <!-- EDIT: the letter -->
           <h3 id="letter-title" class="letter-greeting" tabindex="-1">Mitch, Brad, Liam,</h3>
           <p>Dasha and I are getting married in Xàtiva in 2027.</p>
-          <p>You three have been there for all of it. The highs and the lows. </p>
+          <p>You three have been there for all of it. The highs and the lows.</p>
           <p>At the front it’ll be Dasha and me. Around us, I want you three.</p>
           <p class="letter-question">Will you be my groomsmen?</p>
 
-          <!-- EDIT: the job. Add, remove or reword as you like. -->
           <section class="duties" aria-labelledby="duties-title">
             <h4 id="duties-title" class="duties-title">The job</h4>
             <dl>
               <div><dt>The stag</dt><dd>Where, when and how much. All yours. I’ll turn up where I’m told and provide a list of people.</dd></div>
-              <div><dt>The speeches</dt><dd>A few words at the reception. Dasha’s family will be listening. Don’t worry, most of them won't understand Bristolian.</dd></div>
-              <div><dt>The day</dt><dd>Keep the groom calm, fed and roughly on time.</dd></div>
+              <div><dt>The speeches</dt><dd>A few words at the reception. Dasha’s family will be listening. Don’t worry, most of them won’t understand Bristolian.</dd></div>
+              <div><dt>Transition (T1 &amp; T2)</dt><dd>Keep the groom calm, fed, hydrated (pints count) and roughly on time. No carbon plated shoes at the altar.</dd></div>
               <div><dt>Everything else</dt><dd>Further requests to follow nearer the time. Non-negotiable.</dd></div>
             </dl>
           </section>
@@ -440,7 +465,15 @@
           <p class="letter-sign">Cheers,<span>Matt</span></p>
 
           <div class="accept" id="accept">
-            <p class="accept-title" id="sign-label">Sign to accept</p>
+            <p class="accept-title" id="sign-label">Claim your race bib &amp; sign</p>
+
+            <!-- Athlete / Lad Selector for the Souvenir -->
+            <div class="lad-picker" role="group" aria-label="Who is signing?">
+              <button type="button" class="lad-pill" data-lad="Mitch" data-bib="01">Mitch (#01)</button>
+              <button type="button" class="lad-pill" data-lad="Brad" data-bib="02">Brad (#02)</button>
+              <button type="button" class="lad-pill" data-lad="Liam" data-bib="03">Liam (#03)</button>
+            </div>
+
             <div class="sign-pad">
               <canvas id="sign-canvas" aria-labelledby="sign-label"></canvas>
               <span class="sign-line" aria-hidden="true">Your signature</span>
@@ -459,17 +492,27 @@
           </div>
 
           <div id="confirmation" class="confirmation" role="status" aria-live="polite" hidden>
+            <p class="confirmation-ironman" id="confirmation-ironman">YOU ARE A GROOMSMAN!</p>
             <p class="confirmation-main">Signed. Pints on me. See you in Xàtiva.</p>
-            <p class="confirmation-next">First job: the stag. The group chat’s yours.</p>
+            <p class="confirmation-next">First job: the stag. Screenshot or share your official race bib into the group chat.</p>
+
+            <!-- Generated Souvenir Race Bib / Contract Preview -->
+            <div class="souvenir-wrap">
+              <canvas id="souvenir-canvas" class="souvenir-canvas" width="900" height="560" aria-label="Your signed groomsman souvenir bib"></canvas>
+              <div class="souvenir-actions">
+                <button type="button" id="share-souvenir" class="btn btn-orange">Share souvenir to group chat</button>
+                <a id="whatsapp-link" class="btn btn-teal souvenir-wa" href="#" target="_blank" rel="noopener">Post status to WhatsApp</a>
+              </div>
+            </div>
           </div>
 
-          <!-- EDIT: house rules -->
           <aside class="terms" aria-label="House rules">
             <h4>House rules</h4>
             <ol>
               <li>What happens on the stag stays on the stag. (Dasha, that’s a joke.)</li>
               <li>Factor 50 is compulsory. Nobody’s in the photos looking like a lobster.</li>
               <li>Acceptance is binding, plus one dance with my Nan.</li>
+              <li>Anyone caught checking Strava or mentioning heart-rate zones during the speeches buys a round of shots.</li>
             </ol>
           </aside>
         </div>
